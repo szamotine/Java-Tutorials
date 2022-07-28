@@ -11,6 +11,8 @@ public class Contact {
     private String birthDate;
     private String phoneNumber;
 
+    public Contact(){};
+
     public Contact(String name, String birthDate, String phoneNumber) throws ParseException {
        nameCheck(name);
        phoneNumberCheck(phoneNumber);

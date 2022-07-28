@@ -26,7 +26,11 @@ public class ContactManager {
         if (this.contacts.isEmpty()) throw new IllegalStateException("Cannot remove contact, List is empty");
         Contact ct = contacts.stream().filter(c -> contactName.equals(c.getName())).findFirst().orElse(null);
         this.contacts.remove(ct);
-
+        if (ct != null) {
+            System.out.println("Successfully removed " + ct.getName());
+        }else{
+            System.out.println(contactName + " not found, cannot remove");
+        }
     }
 
     public void printContacts(){

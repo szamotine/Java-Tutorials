@@ -9,17 +9,21 @@ public class Main {
     static ContactManager cm = new ContactManager();
 
     public static void main(String[] args){
-        //TODO Contacts Part 6 Task 3
+
         try{
             String fileName = "contacts.txt";
             loadContacts(fileName);
+            System.out.println("\nContacts Loaded\n\n");
+            manageContacts();
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }finally {
-            System.out.println("\nContacts Loaded\n\n");
+
             cm.printContacts();
         }
-        System.out.println("Test");
+        System.out.println("Program complete");
+
+
 
 
 
@@ -55,6 +59,55 @@ public class Main {
          */
 
     }
+
+    /**
+     * Name: manageContacts
+     * Inside the function:
+     *   - 1. Starts a new instance of Scanner;
+     *   - 2. In an infinite loop, the user can choose to a) add or b) remove a contact c) exit.
+     *   -        case a: ask for the name, phone number and birthDate.
+     *   -        case b: ask who they'd like to remove.
+     *   -        case c: break the loop.
+     *   - 3. call close() from the Scanner object.
+     */
+    public static void manageContacts(){
+        
+        Scanner scan = new Scanner(System.in);
+        String input;
+        while(true){
+            System.out.println("Would you like to \n\ta) add another contact \n\tb)remove a contact \n\tc)exit");
+            input = scan.nextLine();
+            if(input.equals("a")){
+
+                try {
+                    Contact c = new Contact();
+                    System.out.println("\nPlease enter the name");
+                    c.setName(scan.nextLine());
+                    System.out.println("\nPlease enter the phone number");
+                    c.setPhoneNumber(scan.nextLine());
+                    System.out.println("\nPlease enter the birth Date");
+                    c.setBirthDate(scan.nextLine());
+                    cm.addContact(c);
+                    //TODO Part 7 Task 1: blank name, phone number -> remove crash
+                } catch (ParseException e){
+                    System.out.println(e.getMessage());
+                }finally{
+                    System.out.println("\nUpdated Contact list: \n");
+                    cm.printContacts();
+                }
+
+            } else if (input.equals("b")) {
+                System.out.println("\nPlease enter the name of the contact you would like to remove");
+                cm.removeContact(scan.nextLine());
+                cm.printContacts();
+            }else{
+                System.out.println("Exiting");
+                break;
+            }
+        }
+        scan.close();
+    }
+
     /**
      * Name: loadContacts
      * @param fileName (String)
@@ -66,12 +119,18 @@ public class Main {
      *        Hint: use scan.next to grab the next String separated by white space.
      */
     public static void loadContacts(String fileName) throws FileNotFoundException {
-
-        FileInputStream fis = new FileInputStream(fileName);
+        String path = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\Section18\\Contacts\\" + fileName;
+        //String path = ".\\Section18\\Contacts\\" + fileName;
+        FileInputStream fis = new FileInputStream(path);
         Scanner scanFile = new Scanner(fis);
         while (scanFile.hasNextLine()){
             try {
-                Contact contact = new Contact(scanFile.next(), scanFile.next(), scanFile.next());
+                String name = scanFile.next() + " " + scanFile.next();
+                String number = scanFile.next();
+                String date = scanFile.next();
+                //System.out.println("name: " +  name + "number: " + number + "date: " + date);
+                //Contact contact = new Contact(scanFile.next(), scanFile.next(), scanFile.next());
+                Contact contact = new Contact(name, date, number);
                 cm.addContact(contact);
             }catch (ParseException e){
                 System.out.println(e.getMessage());
