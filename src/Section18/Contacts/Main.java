@@ -88,7 +88,7 @@ public class Main {
                     System.out.println("\nPlease enter the birth Date");
                     c.setBirthDate(scan.nextLine());
                     cm.addContact(c);
-                    //TODO Part 7 Task 1: blank name, phone number -> remove crash
+
                 } catch (ParseException e){
                     System.out.println(e.getMessage());
                 }finally{

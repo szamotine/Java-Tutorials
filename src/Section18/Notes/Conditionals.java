@@ -1,4 +1,4 @@
-package Section18;
+package Section18.Notes;
 
 public class Conditionals {
     public static void main(String[] args) {
