@@ -6,7 +6,7 @@ public class Store {
     private ArrayList <Movie> movies;
 
     public Store() {
-        movies = new ArrayList<Movie>();
+        movies = new ArrayList<>();
     }
 
     public Movie getMovie(int index) {
@@ -43,23 +43,32 @@ public class Store {
     }
 
     public void action(String name, String action){
+        if (name.isEmpty() || name == null) {
+            throw new IllegalArgumentException("Name cannot be null/blank in action");
+        }
+        if (movies.isEmpty()) {
+            throw new IllegalStateException("This store does not contain any movies");
+        }
         Movie m = findByName(name);
         if (m!=null){
             switch (action){
                 case "rent":
-                    System.out.println("action: rent");
+                    System.out.println("Renting out " + name);
                     m.setAvailable(false);
                     break;
                 case "sell":
-                    System.out.println("action: sell");
+                    if (!m.isAvailable()) {
+                        throw new IllegalStateException("Cannot sell " + name + ", it is rented");
+                    }
+                    System.out.println("Selling" + name);
                     movies.remove(m);
                     break;
                 case "return":
-                    System.out.println("action: return");
+                    System.out.println("Returning " + name);
                     m.setAvailable(true);
                     break;
                 default:
-                    System.out.println("Invalid action: Action must be rent, buy, or return");
+                   throw new IllegalArgumentException("Invalid action: Action must be rent, buy, or return");
             }
         }else{
             System.out.println(name + " not found, cannot " + action);
@@ -83,4 +92,6 @@ public class Store {
     private Movie findByName(String name){
         return movies.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
     }
+
+
 }

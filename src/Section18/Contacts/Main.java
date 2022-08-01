@@ -120,7 +120,7 @@ public class Main {
      */
     public static void loadContacts(String fileName) throws FileNotFoundException {
         String path = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\Section18\\Contacts\\" + fileName;
-        //String path = ".\\Section18\\Contacts\\" + fileName;
+
         FileInputStream fis = new FileInputStream(path);
         Scanner scanFile = new Scanner(fis);
         while (scanFile.hasNextLine()){
@@ -128,8 +128,6 @@ public class Main {
                 String name = scanFile.next() + " " + scanFile.next();
                 String number = scanFile.next();
                 String date = scanFile.next();
-                //System.out.println("name: " +  name + "number: " + number + "date: " + date);
-                //Contact contact = new Contact(scanFile.next(), scanFile.next(), scanFile.next());
                 Contact contact = new Contact(name, date, number);
                 cm.addContact(contact);
             }catch (ParseException e){
