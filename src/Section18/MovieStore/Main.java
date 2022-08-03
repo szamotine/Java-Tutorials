@@ -16,13 +16,14 @@ public class Main {
             String filename = "MoviesToLoad.txt";
             loadMovies(filename);
             System.out.println("\nMovies loaded\n\n");
+            manageMovies();
         }catch (FileNotFoundException e){
             System.out.println("FNF error: " + e.getMessage());
         }finally{
-            System.out.println(s.toString());
+            System.out.println("Process Completed");
         }
 
-        manageMovies();
+
 
 
     }
@@ -30,23 +31,58 @@ public class Main {
     public static void manageMovies(){
         //TODO MovieStore Part 5 Task 3
         Scanner scan = new Scanner(System.in);
+        String movieName;
+        String action;
+
+        manageMovie:
         while (true){
             System.out.println("\nChoose an option: \n\ta)Purchase \n\tb)Rent \n\tc)Return");
             String choice = scan.nextLine();
-            if (choice.equals("a")){
-                System.out.println("choice a");
-
-            }else if (choice.equals("b")){
-                System.out.println("choice b");
-
-            } else if (choice.equals("c")){
-                System.out.println("choice c");
-
-            }else{
-                System.out.println("Invalid choice");
-                break;
+            switch (choice) {
+                case "a":
+                    System.out.println("\nEnter the name of the movie that you would like to purchase");
+                     movieName = scan.nextLine();
+                    if (movieName == null || movieName.isBlank()) {
+                        System.out.println("\n\nThe input you provided is not valid. Please try again");
+                        break;
+                    }
+                    if (!s.checkAvailable(movieName)) {
+                        System.out.println(movieName + " is not available to be sold, it is rented out");
+                        break;
+                    }
+                     action = "sell";
+                     s.action(movieName, action);
+                    break;
+                case "b":
+                    System.out.println("\nEnter the name of the movie that you would like to rent");
+                    movieName = scan.nextLine();
+                    if (movieName == null || movieName.isBlank()) {
+                        System.out.println("\n\nThe input you provided is not valid. Please try again");
+                        break;
+                    }
+                    action = "rent";
+                    s.action(movieName, action);
+                    break;
+                case "c":
+                    System.out.println("\nEnter the name of the movie that you would like to return");
+                    movieName = scan.nextLine();
+                    if (movieName == null || movieName.isBlank()) {
+                        System.out.println("\n\nThe input you provided is not valid. Please try again");
+                        break;
+                    }
+                    action = "return";
+                    s.action(movieName, action);
+                    break;
+                case "d":
+                   System.out.println(s.toString());
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    break manageMovie;
             }
+            System.out.println(s.toString());
         }
+        System.out.println("Closing scan");
         scan.close();
     }
 

@@ -18,8 +18,6 @@ public class Movie {
         isAvailable = true;
         this.sellingPrice = format.equals("DVD")? 2.25 : 4.25;
         this.rentingPrice = format.equals("DVD")? 0.99 : 1.99;
-        //System.out.println("\nMovie Created:");
-        //printMovie();
     }
 
     public Movie(Movie m){
@@ -29,9 +27,6 @@ public class Movie {
         isAvailable = true;
         this.sellingPrice = format.equalsIgnoreCase("DVD")? 2.25 : 4.25;
         this.rentingPrice = format.equalsIgnoreCase("DVD")? 0.99 : 1.99;
-        //System.out.println("\nMovie Created:");
-       // printMovie();
-
     }
 
     public void printMovie(){

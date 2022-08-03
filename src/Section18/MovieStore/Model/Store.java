@@ -43,7 +43,7 @@ public class Store {
     }
 
     public void action(String name, String action){
-        if (name.isEmpty() || name == null) {
+        if ( name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null/blank in action");
         }
         if (movies.isEmpty()) {
@@ -53,31 +53,43 @@ public class Store {
         if (m!=null){
             switch (action){
                 case "rent":
-                    System.out.println("Renting out " + name);
-                    m.setAvailable(false);
+                    if (m.isAvailable()) {
+                        System.out.println("\tRenting out " + name);
+                        m.setAvailable(false);
+                    }else{
+                        System.out.println("Sorry, " + name + " is already rented out");
+                    }
+
                     break;
                 case "sell":
                     if (!m.isAvailable()) {
                         throw new IllegalStateException("Cannot sell " + name + ", it is rented");
                     }
-                    System.out.println("Selling" + name);
+                    System.out.println("\tSelling " + name);
                     movies.remove(m);
                     break;
                 case "return":
-                    System.out.println("Returning " + name);
-                    m.setAvailable(true);
+                    if (!m.isAvailable()) {
+                        System.out.println("\tReturning " + name);
+                        m.setAvailable(true);
+                    }else{
+                        System.out.println("Movie has not been rented yet");
+                    }
+
                     break;
                 default:
-                   throw new IllegalArgumentException("Invalid action: Action must be rent, buy, or return");
+                   throw new IllegalArgumentException("\tInvalid action: Action must be rent, buy, or return");
             }
-        }else{
+        }else if (action.equals("return")) {
+            System.out.println("Cannot return a sold movie");
+        }
+        else{
             System.out.println(name + " not found, cannot " + action);
         }
     }
 
     public String toString(){
-        String temp = "\n";
-
+        String temp = "\n ------------Movie List------------\n";
         for (Movie m: movies) {
             temp += m.getName()
                     + "\nFormat: " + m.getFormat()
@@ -91,6 +103,11 @@ public class Store {
 
     private Movie findByName(String name){
         return movies.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
+    }
+
+    public boolean checkAvailable(String name){
+        Movie m = findByName(name);
+        return m.isAvailable();
     }
 
 
