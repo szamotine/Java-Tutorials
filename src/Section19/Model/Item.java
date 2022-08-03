@@ -1,0 +1,51 @@
+package Section19.Model;
+
+public class Item {
+    private String name;
+    private double price;
+
+    public Item(String name, double price) {
+       checkName(name);
+       checkPrice(price);
+        this.name = name;
+        this.price = price;
+    }
+
+    public Item(Item source) {
+        this.name = source.name;
+        this.price = source.price;
+    }
+
+    public String toString(){
+        return name + ": $" + price + " ";
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        checkName(name);
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        checkPrice(price);
+        this.price = price;
+    }
+    private void checkName(String name){
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be null or blank");
+        }
+    }
+    private void checkPrice(double price){
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be less than 0");
+        }
+    }
+}

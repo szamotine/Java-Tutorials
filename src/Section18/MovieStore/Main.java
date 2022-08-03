@@ -29,7 +29,6 @@ public class Main {
     }
 
     public static void manageMovies(){
-        //TODO MovieStore Part 5 Task 3
         Scanner scan = new Scanner(System.in);
         String movieName;
         String action;
