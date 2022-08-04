@@ -1,31 +1,86 @@
 package Section19;
 
+import Section19.Model.Cart;
+import Section19.Model.Item;
+import Section19.Model.Store;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Main {
+    static Store s = new Store();
     public static void main(String[] args){
 
-        //TODO Shopping Cart Part 8 Task 2
-
-
-
-/*        Item[][] inventory = new Item[][] {
-                { new Item("Pepsi", 1.99), new Item("Crush", 1.99), new Item("Cola", 1.99) },
-                { new Item("Honey Oats", 3.99), new Item("Fruit Loops", 1.99), new Item("Cheerios", 2.99) },
-                { new Item("Milk", 4.99), new Item("Eggs", 0.99), new Item("Cheese", 1.89) },
-                { new Item("Pepperoni", 2.99), new Item("Salami", 4.49), new Item("Mortadella", 4.99) },
-                { new Item("Celery", 0.99), new Item("Spinach", 0.99), new Item("Coriander", 1.29) },
-                { new Item("Shirt", 12.99), new Item("Pants", 24.99), new Item("Sweater", 18.99) },
-                { new Item("Phone", 549.99), new Item("Printer", 349.99), new Item("Television", 1099) }
-        };
-        Store s = new Store();
-        for (int i = 0; i < inventory.length; i++) {
-            for (int j = 0; j < inventory[i].length; j++) {
-                s.setItems(i,j,inventory[i][j]);
-            }
+        Cart c = new Cart();
+        String file = "products.txt";
+        try{
+            loadItems(file);
+        }catch(FileNotFoundException e){
+            System.out.println("Error: File not Found");
+        }finally {
+            System.out.println(s.toString());
         }
 
-        System.out.println("\n\t******************************JAVA GROCERS******************************\n");
 
-        System.out.println(s + "\n");*/
-       
+    }
+
+    /**
+     * Name: manageItems <------
+     * Inside the function:
+     *   - 1. Starts a new instance of Scanner;
+     *   - 2. Creates an infinite loop:
+     *   -        The user can choose to a) add or b) remove c) checkout.
+     *   -          case a: asks for the aisle and item number. Then, adds item to cart.
+     *   -          case b: asks for the name. Then, removes item from cart.
+     *   -          case c: prints the receipt and closes Scanner.
+     *   -        Prints the updated shopping cart.
+     */
+    static void manageItems(){
+        //TODO Shopping Cart part 8 task 4
+    }
+
+    /**
+     * Name: loadItems
+     * @param filename : name of file that contains items
+     * @throws FileNotFoundException
+     * Inside the function:
+     *  *   1. loads items from <fileName>.
+     *  *      - while loop runs through every line in <fileName>
+     *  *      - scan.nextLine() picks up the entire line.
+     *  *      - splits each String using the ";" separator.
+     *  *      - splits both fields in each String using the "=" separator.
+     *  *      - Parse each price into a Double.
+     *  *   2. adds all items to the store object's items field.
+     */
+    static void loadItems(String filename) throws FileNotFoundException{
+        String path = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\Section19\\Model\\" + filename;
+
+        FileInputStream fis = new FileInputStream(path);
+        Scanner scanFile = new Scanner(fis);
+        //ArrayList<Item> items = new ArrayList<>();
+        int row = 0;
+        while(scanFile.hasNextLine()){
+            try {
+                String line = scanFile.nextLine();
+                String[] product = line.split("[;//=]");
+
+                int index=0;
+
+//                for (int i = 0; i < product.length; i+=2) {
+//                    items.add(new Item(product[i], Double.parseDouble(product[i+1]) ));
+//                }
+
+                for (int i = 0; i < 3; i++) {
+                    s.setItems(row,i,new Item(product[index++], Double.parseDouble(product[index++])) );
+                }
+                row++;
+
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        //System.out.println(s.toString());
+
     }
 }
