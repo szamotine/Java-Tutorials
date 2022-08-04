@@ -19,6 +19,7 @@ public class Cart {
     }
     //remove
     public void remove(Item i){
+       checkCart();
         if (this.items.contains(i)) {
             this.items.remove(i);
         }else{
@@ -27,6 +28,7 @@ public class Cart {
     }
 
     public String checkOut(){
+        checkCart();
         double subTotal =0;
         double taxAmount;
         double total;
@@ -57,7 +59,11 @@ public class Cart {
         }
         return temp;
     }
-    private void equals(Item i){
-        //TODO Shopping Cart part 4: Watch equals() method lesson then complete
+
+    private void checkCart(){
+        if(this.items.isEmpty()){
+            throw new IllegalStateException("Error: Cart is empty");
+        }
     }
+
 }
