@@ -16,6 +16,7 @@ public class Main {
         String file = "products.txt";
         try{
             loadItems(file);
+            manageItems();
         }catch(FileNotFoundException e){
             System.out.println("Error: File not Found");
         }finally {
@@ -37,7 +38,29 @@ public class Main {
      *   -        Prints the updated shopping cart.
      */
     static void manageItems(){
-        //TODO Shopping Cart part 8 task 4
+        //TODO Shopping Cart part 8 task 4 case a
+        Scanner scan = new Scanner(System.in);
+        while (true){
+            clearScreen();
+            System.out.println("\n\t******************************JAVA GROCERS******************************\n");
+            System.out.println(s);
+            System.out.println("Options: \n\ta) Add to cart\n\tb) Remove from cart \n\tc) Checkout");
+            String input = scan.nextLine();
+            switch (input){
+                case "a": System.out.println("Add"); break;
+                case "b": System.out.println("Remove"); break;
+                case "c": System.out.println("Checkout"); break;
+
+                default:
+                    scan.close();
+                    System.out.println("Exiting Program");
+                    System.exit(99);
+
+            }
+
+
+
+        }
     }
 
     /**
@@ -83,4 +106,11 @@ public class Main {
         //System.out.println(s.toString());
 
     }
+
+    static void clearScreen(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }
+
+
