@@ -3,33 +3,38 @@ package Section19.Model;
 public class Store {
     private Item[][] items;
     public Store() {
-        this.items = new Item[7][3];
+        this.items = new Item[7][3]; // [
     }
     public Item getItems (int row, int column) {
-        return new Item (this.items[row][column]);
+        if(row < items.length && column < items[row].length){
+            return new Item (this.items[row][column]);
+        }else {
+            System.out.println("Invalid aisle/row selection");
+            return null;
+        }
+
     }
     public void setItems(int row, int column, Item item) {
         this.items[row][column] = new Item (item);
     }
-
     public String toString(){
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for (int i = 0; i < items.length; i++) {
             switch (i) {
-                case 0: temp += "\tDRINKS:        "; break;
-                case 1: temp += "\tCEREAL:        "; break;
-                case 2: temp += "\tDAIRY:         "; break;
-                case 3: temp += "\tDELI:          "; break;
-                case 4: temp += "\tGREENS:        "; break;
-                case 5: temp += "\tCLOTHING:      "; break;
-                case 6: temp += "\tELECTRONICS:   "; break;
+                case 0: temp.append("\tDRINKS:        "); break;
+                case 1: temp.append("\tCEREAL:        "); break;
+                case 2: temp.append("\tDAIRY:         "); break;
+                case 3: temp.append("\tDELI:          "); break;
+                case 4: temp.append("\tGREENS:        "); break;
+                case 5: temp.append("\tCLOTHING:      "); break;
+                case 6: temp.append("\tELECTRONICS:   "); break;
             }
             for (int j = 0; j < items[i].length; j++) {
-                temp+= items[i][j].toString() + "\t\t";
+                temp.append(items[i][j].toString()).append("\t\t");
             }
-            temp += "\n\n";
+            temp.append("\n\n");
         }
-
-        return temp;
+        return temp.toString();
     }
+
 }
