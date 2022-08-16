@@ -14,7 +14,7 @@ public class Cart {
       this.filteredList = new ArrayList<>();
     }
 
-    public void add(Item i){
+    public void addItem(Item i){
         if (this.items.contains(i)) {
             System.out.println("Cannot add item, it is already in the cart");
         }else if(i == null) {
@@ -24,7 +24,21 @@ public class Cart {
             System.out.println(i.getName() + " was added to your shopping cart");
         }
     }
-    //remove
+    public void clear(){
+        this.items.clear();
+    }
+    public boolean add(Item i){
+        if(this.items.contains(i)){
+            return false;
+        }
+        this.items.add(new Item (i));
+        return true;
+    }
+
+    public boolean contains(Item i){
+        return this.items.contains(i);
+    }
+
     public void remove(Item i){
        checkCart();
         if (this.items.contains(i) && i != null) {
@@ -33,6 +47,10 @@ public class Cart {
         }else{
             System.out.println("Cannot remove item, it is not in the cart");
         }
+    }
+
+    public void removeItem(Item i){
+        //TODO Shopping Cart Part 3 removeIF https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/6509c8e8-0b0a-408b-aede-9870531df68f
     }
 
     public String checkOut(){

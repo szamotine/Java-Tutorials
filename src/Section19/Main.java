@@ -71,7 +71,7 @@ public class Main {
                         break;
                     }
                     Item i = s.getItems(aisle,itemNumber);
-                    c.add(i);
+                    c.addItem(i);
 
                     break;
                 case "b":
