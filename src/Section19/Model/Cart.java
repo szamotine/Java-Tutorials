@@ -1,13 +1,11 @@
 package Section19.Model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Cart {
-    private ArrayList<Item> items;
-    private double tax = 0.13;
-
-    private Scanner scan = new Scanner(System.in);
+    private final ArrayList<Item> items;
+    private final double tax = 0.13;
 
     public Cart() {
        this.items = new ArrayList<>();
@@ -50,6 +48,24 @@ public class Cart {
                 "\tTotal: $" + total + "\n";
     }
 
+    public double getSubtotal(double[] items){
+        double subtotal =0;
+        for (double i: items) {
+            subtotal += i;
+        }
+        return subtotal;
+    }
+
+    public double getTax(double subtotal){
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        return Double.parseDouble(formatter.format(subtotal*tax));
+       // return (double)Math.round(subtotal * tax * 100)/100;
+    }
+
+    public double getTotal(double subtotal, double taxAmount){
+        return subtotal + taxAmount;
+    }
+
     public Item getItems(int index) {
         return new Item (items.get(index));
     }
@@ -59,12 +75,12 @@ public class Cart {
     }
 
     public String toString(){
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for (Item i: this.items
              ) {
-            temp += i.toString() + "\n";
+            temp.append(i.toString()).append("\n");
         }
-        return temp;
+        return temp.toString();
     }
 
     private void checkCart(){
