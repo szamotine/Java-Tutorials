@@ -2,13 +2,16 @@ package Section19.Model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Cart {
     private final ArrayList<Item> items;
+    //private final ArrayList<Item> filteredList;
     private final double tax = 0.13;
 
     public Cart() {
        this.items = new ArrayList<>();
+      //this.filteredList = new ArrayList<>();
     }
 
     public void add(Item i){
@@ -105,5 +108,16 @@ public class Cart {
             System.out.println("Could not find " + name + " in cart");
         }
         return temp;
+    }
+
+    public void filterList(){
+        //TODO Stream function
+        System.out.println("Please enter the maximum acceptable price");
+        Scanner scan = new Scanner(System.in);
+        if(scan.hasNextDouble()){
+            double max = Double.parseDouble(scan.nextLine());
+        }
+      //  this.items.stream().filter((getItems().getPrice() < 5 ));
+
     }
 }

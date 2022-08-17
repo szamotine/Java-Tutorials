@@ -40,7 +40,7 @@ public class Main {
      *   -        Prints the updated shopping cart.
      */
     static void manageItems(){
-        //TODO Shopping Cart part 8 task 4 case a
+
         Scanner scan = new Scanner(System.in);
         int aisle;
         int itemNumber;
