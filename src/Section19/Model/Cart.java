@@ -111,30 +111,12 @@ public class Cart {
     }
 
     public void filterList(double max){
-        //TODO Stream function
-
- //       System.out.println("Please enter the maximum acceptable price");
-
-
-//        Scanner scan = new Scanner(System.in);
-//        if(scan.hasNextDouble()){
-//             max = Double.parseDouble(scan.nextLine());
-//             scan.nextLine();
-//            System.out.println("Input: " + max);
-//        }
-
-      //  this.items.stream().filter((getItems().getPrice() < 5 ));
-
-
-        this.filteredList.addAll
-                (this.items.stream()
+        this.filteredList.addAll(
+                this.items.stream()
                 .filter(item -> item.getPrice() < max)
-                .collect(Collectors.toList()) );
- //       scan.close();
-
+                .collect(Collectors.toList())
+                );
         System.out.println(printFilteredList());
-
-
     }
 
     public String printFilteredList(){
