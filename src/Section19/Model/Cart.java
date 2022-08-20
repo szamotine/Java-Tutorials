@@ -2,16 +2,16 @@ package Section19.Model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Cart {
     private final ArrayList<Item> items;
-    //private final ArrayList<Item> filteredList;
+    private final ArrayList<Item> filteredList;
     private final double tax = 0.13;
 
     public Cart() {
        this.items = new ArrayList<>();
-      //this.filteredList = new ArrayList<>();
+      this.filteredList = new ArrayList<>();
     }
 
     public void add(Item i){
@@ -110,14 +110,39 @@ public class Cart {
         return temp;
     }
 
-    public void filterList(){
+    public void filterList(double max){
         //TODO Stream function
-        System.out.println("Please enter the maximum acceptable price");
-        Scanner scan = new Scanner(System.in);
-        if(scan.hasNextDouble()){
-            double max = Double.parseDouble(scan.nextLine());
-        }
+
+ //       System.out.println("Please enter the maximum acceptable price");
+
+
+//        Scanner scan = new Scanner(System.in);
+//        if(scan.hasNextDouble()){
+//             max = Double.parseDouble(scan.nextLine());
+//             scan.nextLine();
+//            System.out.println("Input: " + max);
+//        }
+
       //  this.items.stream().filter((getItems().getPrice() < 5 ));
 
+
+        this.filteredList.addAll
+                (this.items.stream()
+                .filter(item -> item.getPrice() < max)
+                .collect(Collectors.toList()) );
+ //       scan.close();
+
+        System.out.println(printFilteredList());
+
+
+    }
+
+    public String printFilteredList(){
+        StringBuilder temp = new StringBuilder();
+        for (Item i: this.filteredList
+        ) {
+            temp.append(i.toString()).append("\n");
+        }
+        return temp.toString();
     }
 }
