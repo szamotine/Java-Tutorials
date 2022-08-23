@@ -15,14 +15,10 @@ public class Store {
     }
 
     public boolean contains(Movie m){
-        boolean flag = false;
-        flag = movies.contains(m);
-        return flag;
+        return movies.contains(m);
     }
     public boolean contains(String movie){
-        boolean flag = false;
-        flag = movies.contains(findByName(movie));
-        return flag;
+        return movies.contains(findByName(movie));
     }
 
     public void setMovie(int index, Movie movie) {
@@ -120,6 +116,8 @@ public class Store {
         Movie m = findByName(name);
         return m.isAvailable();
     }
+
+
 
 
 }

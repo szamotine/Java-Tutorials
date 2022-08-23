@@ -17,21 +17,21 @@ public class MovieStoreTests {
         store.addMovie(m1);
         store.addMovie(m2);
     }
-    //TODO MovieStore Part 1 Unit Testing https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/7ad7931e-2baf-4cc1-b6bb-1c095a3bfde1
-    //add movie
-    //sell a movie
-    //rent a movie
-    //return a movie
+
     @Test
     public void movieAdded(){
         assertTrue(store.contains(store.findByName(m1.getName())));
         assertTrue(store.contains(m1.getName()));
+        assertTrue(store.contains(m1));
+        assertTrue(store.contains(new Movie(m1)));
+
 
 
     }
 
     @Test
     public void movieSold(){
+        //TODO Movie Store part 3 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/660c0029-3e63-4a2c-b664-885f05b0718c
         store.action(m1.getName(), "sell");
         assertFalse(store.contains(m1.getName()));
 
