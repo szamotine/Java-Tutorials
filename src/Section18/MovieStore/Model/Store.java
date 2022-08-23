@@ -30,13 +30,7 @@ public class Store {
     }
 
     public void sellMovie(String movieName){
-        Movie m = findByName(movieName);
-        if (m != null) {
-            movies.remove(m);
-            System.out.println(movieName + " Successfully sold");
-        }else{
-            System.out.println(movieName + " not found, cannot sell");
-        }
+        movies.removeIf(element -> findByName(movieName) != null);
     }
 
     public void rentMovie(String movieName){

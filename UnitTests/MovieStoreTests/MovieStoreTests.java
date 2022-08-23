@@ -31,9 +31,9 @@ public class MovieStoreTests {
 
     @Test
     public void movieSold(){
-        //TODO Movie Store part 3 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/660c0029-3e63-4a2c-b664-885f05b0718c
-        store.action(m1.getName(), "sell");
-        assertFalse(store.contains(m1.getName()));
+        assertTrue(store.contains(m2.getName()));
+        store.sellMovie(m2.getName());
+        assertFalse(store.contains(m2.getName()));
 
     }
 
@@ -43,6 +43,12 @@ public class MovieStoreTests {
         assertFalse(store.checkAvailable(m1.getName()));
 
     }
+
+    @Test
+    public void rentMovieTest(){
+        //TODO Movie Store Part 4 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/660c0029-3e63-4a2c-b664-885f05b0718c
+    }
+
 
     @Test
     public void movieReturned(){
