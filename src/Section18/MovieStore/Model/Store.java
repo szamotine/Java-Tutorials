@@ -3,7 +3,7 @@ package Section18.MovieStore.Model;
 import java.util.ArrayList;
 
 public class Store {
-    private ArrayList <Movie> movies;
+    private final ArrayList <Movie> movies;
 
     public Store() {
         movies = new ArrayList<>();
@@ -12,6 +12,17 @@ public class Store {
     public Movie getMovie(int index) {
 
         return new Movie(movies.get(index));
+    }
+
+    public boolean contains(Movie m){
+        boolean flag = false;
+        flag = movies.contains(m);
+        return flag;
+    }
+    public boolean contains(String movie){
+        boolean flag = false;
+        flag = movies.contains(findByName(movie));
+        return flag;
     }
 
     public void setMovie(int index, Movie movie) {
@@ -101,7 +112,7 @@ public class Store {
         return temp;
     }
 
-    private Movie findByName(String name){
+    public Movie findByName(String name){
         return movies.stream().filter(m -> name.equals(m.getName())).findFirst().orElse(null);
     }
 

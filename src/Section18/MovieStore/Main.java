@@ -75,6 +75,10 @@ public class Main {
                 case "d":
                    System.out.println(s.toString());
                     break;
+                case "e":
+                    System.out.println(s.contains(s.findByName("The Shawshank Redemption Part 2") ) );
+
+                    break;
                 default:
                     System.out.println("Invalid choice");
                     break manageMovie;
