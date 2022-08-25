@@ -1,9 +1,11 @@
 package Section18.MovieStore.Model;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class Store {
-    private final ArrayList <Movie> movies;
+    private final List<Movie> movies;
 
     public Store() {
         movies = new ArrayList<>();
@@ -30,12 +32,17 @@ public class Store {
     }
 
     public void sellMovie(String movieName){
-        movies.removeIf(element -> findByName(movieName) != null);
+        if (!(findByName(movieName).isAvailable())) {
+            throw new IllegalStateException("Cannot sell rented movie");
+        }
+        movies.removeIf((movie) -> movie.getName().equals(movieName));
     }
 
     public void rentMovie(String movieName){
         Movie m = findByName(movieName);
-        m.setAvailable(false);
+        if (m != null) {
+            m.setAvailable(false);
+        }
     }
 
     public void returnMovie(String movieName){
@@ -90,16 +97,13 @@ public class Store {
     }
 
     public String toString(){
-        String temp = "\n ------------Movie List------------\n";
+        StringBuilder temp = new StringBuilder("\n ------------Movie List------------\n");
         for (Movie m: movies) {
-            temp += m.getName()
-                    + "\nFormat: " + m.getFormat()
-                    + "\nRating: " + m.getRating()
-                    + "\nRentingPrice: " + m.getRentingPrice()
-                    + "\nSellingPrice: " + m.getSellingPrice() + "\n\n";
+            temp.append(m.getName()).append("\nFormat: ").append(m.getFormat()).append("\nRating: ").append(m.getRating()).append("\nRentingPrice: ").append(m.getRentingPrice())
+                    .append("\nSellingPrice: ").append(m.getSellingPrice()).append("\n\n");
 
         }
-        return temp;
+        return temp.toString();
     }
 
     public Movie findByName(String name){
@@ -109,6 +113,13 @@ public class Store {
     public boolean checkAvailable(String name){
         Movie m = findByName(name);
         return m.isAvailable();
+    }
+
+    public int getMovieIndex(String movieName){
+        return IntStream.range(0, this.movies.size())
+                .filter((index) -> this.movies.get(index).getName().equals(movieName))
+                .findFirst()
+                .orElse(-1000);
     }
 
 

@@ -34,19 +34,23 @@ public class MovieStoreTests {
         assertTrue(store.contains(m2.getName()));
         store.sellMovie(m2.getName());
         assertFalse(store.contains(m2.getName()));
-
+    }
+    @Test (expected = IllegalStateException.class)
+    public void movieNotInStock(){
+        store.action(m1.getName(), "rent");
+        store.sellMovie(m1.getName());
     }
 
     @Test
     public void movieRented(){
         store.action(m1.getName(), "rent");
         assertFalse(store.checkAvailable(m1.getName()));
-
     }
 
     @Test
     public void rentMovieTest(){
-        //TODO Movie Store Part 4 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/660c0029-3e63-4a2c-b664-885f05b0718c
+       store.rentMovie(m1.getName());
+       assertFalse(store.checkAvailable(m1.getName()));
     }
 
 
