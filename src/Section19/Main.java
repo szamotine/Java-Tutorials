@@ -40,7 +40,7 @@ public class Main {
      *   -        Prints the updated shopping cart.
      */
     static void manageItems(){
-        //TODO Shopping Cart part 8 task 4 case a
+
         Scanner scan = new Scanner(System.in);
         int aisle;
         int itemNumber;
@@ -48,7 +48,7 @@ public class Main {
 
             System.out.println("\n\t******************************JAVA GROCERS******************************\n");
             System.out.println(s);
-            System.out.println("Options: \n\ta) Add to cart\n\tb) Remove from cart \n\tc) Checkout");
+            System.out.println("Options: \n\ta) Add to cart\n\tb) Remove from cart \n\tc) Checkout\n\td) Filter Cart");
             String input = scan.nextLine();
             switch (input){
                 case "a":
@@ -71,7 +71,7 @@ public class Main {
                         break;
                     }
                     Item i = s.getItems(aisle,itemNumber);
-                    c.add(i);
+                    c.addItem(i);
 
                     break;
                 case "b":
@@ -92,7 +92,12 @@ public class Main {
                     }
                     break;
                 case "d":
-                    System.out.println(c);
+                    c.filterList(10);
+
+                    break;
+                case "e":
+
+                    System.out.println(c.printFilteredList());
                     break;
                 default:
                     scan.close();

@@ -1,19 +1,20 @@
 package Section19.Model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Cart {
-    private ArrayList<Item> items;
-    private double tax = 0.13;
-
-    private Scanner scan = new Scanner(System.in);
+    private final ArrayList<Item> items;
+    private final ArrayList<Item> filteredList;
+    private final double tax = 0.13;
 
     public Cart() {
        this.items = new ArrayList<>();
+      this.filteredList = new ArrayList<>();
     }
 
-    public void add(Item i){
+    public void addItem(Item i){
         if (this.items.contains(i)) {
             System.out.println("Cannot add item, it is already in the cart");
         }else if(i == null) {
@@ -23,7 +24,21 @@ public class Cart {
             System.out.println(i.getName() + " was added to your shopping cart");
         }
     }
-    //remove
+    public void clear(){
+        this.items.clear();
+    }
+    public boolean add(Item i){
+        if(this.items.contains(i)){
+            return false;
+        }
+        this.items.add(new Item (i));
+        return true;
+    }
+
+    public boolean contains(Item i){
+        return this.items.contains(i);
+    }
+
     public void remove(Item i){
        checkCart();
         if (this.items.contains(i) && i != null) {
@@ -32,6 +47,10 @@ public class Cart {
         }else{
             System.out.println("Cannot remove item, it is not in the cart");
         }
+    }
+
+    public void removeItem(Item i){
+        //TODO Shopping Cart Part 3 removeIF https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/ad5400b5-ecc0-47b1-be30-79943ad3155c
     }
 
     public String checkOut(){
@@ -50,6 +69,24 @@ public class Cart {
                 "\tTotal: $" + total + "\n";
     }
 
+    public double getSubtotal(double[] items){
+        double subtotal =0;
+        for (double i: items) {
+            subtotal += i;
+        }
+        return subtotal;
+    }
+
+    public double getTax(double subtotal){
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        return Double.parseDouble(formatter.format(subtotal*tax));
+       // return (double)Math.round(subtotal * tax * 100)/100;
+    }
+
+    public double getTotal(double subtotal, double taxAmount){
+        return subtotal + taxAmount;
+    }
+
     public Item getItems(int index) {
         return new Item (items.get(index));
     }
@@ -59,12 +96,12 @@ public class Cart {
     }
 
     public String toString(){
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for (Item i: this.items
              ) {
-            temp += i.toString() + "\n";
+            temp.append(i.toString()).append("\n");
         }
-        return temp;
+        return temp.toString();
     }
 
     private void checkCart(){
@@ -89,5 +126,23 @@ public class Cart {
             System.out.println("Could not find " + name + " in cart");
         }
         return temp;
+    }
+
+    public void filterList(double max){
+        this.filteredList.addAll(
+                this.items.stream()
+                .filter(item -> item.getPrice() < max)
+                .collect(Collectors.toList())
+                );
+        System.out.println(printFilteredList());
+    }
+
+    public String printFilteredList(){
+        StringBuilder temp = new StringBuilder();
+        for (Item i: this.filteredList
+        ) {
+            temp.append(i.toString()).append("\n");
+        }
+        return temp.toString();
     }
 }

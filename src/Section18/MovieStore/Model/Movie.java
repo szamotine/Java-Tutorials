@@ -104,4 +104,12 @@ public class Movie {
         isAvailable = available;
     }
 //endregion
+
+    public boolean equals(Object obj){
+        if(obj == null) return false;
+        if(!(obj instanceof Movie)) return false;
+        Movie movie = (Movie)obj;
+
+        return this.getName().equals(movie.getName()) && this.getFormat().equals(movie.getFormat()) && this.getRating() == movie.getRating();
+    }
 }
