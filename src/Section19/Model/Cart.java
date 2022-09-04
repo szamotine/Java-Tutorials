@@ -50,7 +50,7 @@ public class Cart {
     }
 
     public void removeItem(Item i){
-        //TODO Shopping Cart Part 3 removeIF https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/6509c8e8-0b0a-408b-aede-9870531df68f
+        //TODO Shopping Cart Part 3 removeIF https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/ad5400b5-ecc0-47b1-be30-79943ad3155c
     }
 
     public String checkOut(){
