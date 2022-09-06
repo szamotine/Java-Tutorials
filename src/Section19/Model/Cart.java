@@ -49,8 +49,10 @@ public class Cart {
         }
     }
 
-    public void removeItem(Item i){
-        //TODO Shopping Cart Part 3 removeIF https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/ad5400b5-ecc0-47b1-be30-79943ad3155c
+    public void removeItem(String itemName){
+        this.items.removeIf(item -> item.getName().equals(itemName));
+       // System.out.println(itemName + " removed");
+
     }
 
     public String checkOut(){
