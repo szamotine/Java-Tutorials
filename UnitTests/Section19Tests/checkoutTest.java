@@ -55,19 +55,23 @@ public class checkoutTest {
 
     @Test
     public void subtotalIsValidTest(){
-        assertEquals(6.6, c.getSubtotal(prices),0);
+        double subtotal = i1.getPrice() + i2.getPrice();
+        assertEquals(subtotal, c.getSubtotal(),0);
     }
 
     @Test
     public void taxisValidTest(){
+
         assertEquals(0.86, c.getTax(6.6), 0);
     }
 
     @Test
     public void totalIsValidTest(){
-        assertEquals(7.46, c.getTotal(6.6, 0.86),0);
+        double subtotal = i1.getPrice() + i2.getPrice();
+        double taxAmount = c.getTax(subtotal);
+        double total = subtotal + taxAmount;
+        assertEquals(total, c.getTotal(c.getSubtotal(), c.getTax(c.getSubtotal())),0);
     }
-
     @Test (expected = IllegalStateException.class)
     public void checkoutEmptyCartTest(){
         c.clear();

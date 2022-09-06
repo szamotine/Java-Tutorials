@@ -71,12 +71,8 @@ public class Cart {
                 "\tTotal: $" + total + "\n";
     }
 
-    public double getSubtotal(double[] items){
-        double subtotal =0;
-        for (double i: items) {
-            subtotal += i;
-        }
-        return subtotal;
+    public double getSubtotal(){
+        return this.items.stream().mapToDouble(Item::getPrice).sum();
     }
 
     public double getTax(double subtotal){
