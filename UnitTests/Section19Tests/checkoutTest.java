@@ -40,7 +40,7 @@ public class checkoutTest {
 
     @Test
     public void itemRemovedTest(){
-        //c.remove(i1);
+
         c.removeItem(i1.getName());
         assertFalse(c.contains(i1));
 
