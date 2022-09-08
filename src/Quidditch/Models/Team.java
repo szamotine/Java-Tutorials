@@ -1,6 +1,7 @@
 package Quidditch.Models;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Team {
     private static final String POSITION_CHASER = "chaser";
@@ -12,12 +13,26 @@ public class Team {
     private String seeker;
     private String[] chasers;
 
+    //#region Constructors
     public Team(String house, String keeper, String seeker, String[] chasers) {
+        if(house == null || keeper == null ||seeker == null){
+            throw new IllegalArgumentException("Fields cannot be null");
+        }
+        if( house.isBlank() || keeper.isBlank() || seeker.isBlank()){
+            throw new IllegalArgumentException("Fields cannot be blank");
+        }
+
+        if( chasers == null || chasers.length != 3){
+            throw new IllegalArgumentException("Chasers must have 3 members and cannot be null");
+        }
+        if(hasBlank(chasers) || hasNull(chasers)){
+            throw new IllegalArgumentException("Chasers may not contain null or blank entries");
+        }
+
         this.house = house;
         this.keeper = keeper;
         this.seeker = seeker;
         this.chasers = Arrays.copyOf(chasers, chasers.length);
-        //TODO Quidditch Part 2 Task 1: https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/5bace35c-45c8-4cbc-89c1-2e5cc45766eb
     }
 
     public Team(Team t){
@@ -25,14 +40,16 @@ public class Team {
         this.keeper = t.keeper;
         this.seeker  = t.seeker;
         this.chasers = Arrays.copyOf(t.chasers, t.chasers.length);
-
     }
+    //#endregion
 
+   //#region Getters
     public String getHouse() {
         return house;
     }
 
     public void setHouse(String house) {
+        checkParam(house);
         this.house = house;
     }
 
@@ -41,6 +58,7 @@ public class Team {
     }
 
     public void setKeeper(String keeper) {
+        checkParam(keeper);
         this.keeper = keeper;
     }
 
@@ -49,17 +67,19 @@ public class Team {
     }
 
     public void setSeeker(String seeker) {
+        checkParam(seeker);
         this.seeker = seeker;
     }
 
-    public String getChasers(int index) {
-        return chasers[index];
+    public String[] getChasers() {
+        return Arrays.copyOf(this.chasers, this.chasers.length);
     }
 
-    public void setChasers(String name, int index) {
-        this.chasers[index] = name;
+    public void setChasers(String[] chasers) {
+        this.chasers = Arrays.copyOf(chasers, chasers.length);
     }
 
+    @Override
     public String toString(){
         return "House: " + this.house + "\n" +
                 "Keeper: " + this.keeper + "\n" +
@@ -75,5 +95,18 @@ public class Team {
     }
     public static String getPositionKeeper(){
         return POSITION_KEEPER;
+    }
+    //#endregion
+
+    public static boolean hasNull(String[] array){
+        return Arrays.stream(array).anyMatch(Objects::isNull);
+    }
+    public static boolean hasBlank(String[] array){
+        return Arrays.stream(array).anyMatch(String::isBlank);
+    }
+    public void checkParam(String param){
+        if(param == null || param.isBlank()){
+            throw new IllegalArgumentException(param + " cannot be null or blank");
+        }
     }
 }
