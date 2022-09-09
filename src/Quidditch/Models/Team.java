@@ -43,7 +43,7 @@ public class Team {
     }
     //#endregion
 
-   //#region Getters
+   //#region Getters Setters
     public String getHouse() {
         return house;
     }
@@ -79,13 +79,7 @@ public class Team {
         this.chasers = Arrays.copyOf(chasers, chasers.length);
     }
 
-    @Override
-    public String toString(){
-        return "House: " + this.house + "\n" +
-                "Keeper: " + this.keeper + "\n" +
-                "Seeker: "  + this.seeker + "\n" +
-                "Chasers: " + Arrays.toString(this.chasers) + "\n";
-    }
+
 
     public static String getPositionChaser(){
         return POSITION_CHASER;
@@ -104,9 +98,39 @@ public class Team {
     public static boolean hasBlank(String[] array){
         return Arrays.stream(array).anyMatch(String::isBlank);
     }
-    public void checkParam(String param){
+    private void checkParam(String param){
         if(param == null || param.isBlank()){
             throw new IllegalArgumentException(param + " cannot be null or blank");
         }
     }
+
+    @Override
+    public String toString(){
+        return "House: " + this.house + "\n" +
+                "Keeper: " + this.keeper + "\n" +
+                "Seeker: "  + this.seeker + "\n" +
+                "Chasers: " + Arrays.toString(this.chasers) + "\n";
+    }
+    //#region equals() hashCode()
+    @Override
+    public boolean equals(Object obj){
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Team)) {
+            return false;
+        }
+
+        Team team = (Team)obj;
+        return this.house.equals(team.house) &&
+                this.keeper.equals(team.keeper) &&
+                this.seeker.equals(team.seeker) &&
+                Arrays.toString(this.chasers).equals(Arrays.toString(team.chasers));
+
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(house, keeper, seeker, Arrays.toString(chasers));
+    }
+    //#endregion
 }

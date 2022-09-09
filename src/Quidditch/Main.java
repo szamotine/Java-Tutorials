@@ -17,12 +17,13 @@ public class Main {
 
         Game g = new Game(t1,t2);
 
-        g.setScore(t1, 3);
-        //System.out.println(t1);
+        System.out.println("Team 1 score: " + g.getScore(t1));
+        System.out.println("Team 2 score: " + g.getScore(t2));
+        g.setScore(t1, 50);
+        System.out.println("Team 1 score: " + g.getScore(g.getTeam("GRYFFINDOR")));
+        System.out.println("Team 2 score: " + g.getScore(t2));
 
-        System.out.println(g.getScore(t1));
-
-       // System.out.println(g.getScore(t2));
+        Game g2 = new Game(t1,t2);
 
 
     }
