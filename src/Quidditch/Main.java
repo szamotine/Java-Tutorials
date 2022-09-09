@@ -6,6 +6,7 @@ import Quidditch.Models.Team;
 public class Main {
 
     public static void main (String[] args){
+//TODO Quidditch Part 7 Task 1 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/444e9e67-95b8-4f8f-b8f3-0538b71b09c3
 
         System.out.println("Quidditch Main starting");
 
@@ -24,6 +25,13 @@ public class Main {
         System.out.println("Team 2 score: " + g.getScore(t2));
 
         Game g2 = new Game(t1,t2);
+
+        System.out.println(g.random(5));
+        System.out.println(g.random(5));
+        System.out.println(g.random(5));
+        System.out.println(g.random(5));
+        System.out.println(g.random(5));
+        System.out.println(g.random(5));
 
 
     }

@@ -4,23 +4,26 @@ import java.util.HashMap;
 
 public class Game {
     private HashMap <Team, Integer> scoreboard;
-
     private static int gameCount;
+    private final int QUAFFLE_POINTS = 10;
+    private final int SNITCH_POINTS = 150;
 
     static {
         gameCount = 0;
     }
-
     public Game(Team home, Team away) {
        this.scoreboard = new HashMap<>();
        this.scoreboard.put(new Team(home), 0);
        this.scoreboard.put(new Team(away), 0);
        gameCount++;
     }
-    public Integer getScore(Team team){
+    public int getScore(Team team){
         return this.scoreboard.get(team);
     }
     public void setScore(Team team, Integer score){
+        if (team == null) {
+            throw new IllegalArgumentException("Team cannot be null");
+        }
         scoreboard.put(team, score);
     }
     public Team getTeam(String name){
@@ -29,5 +32,53 @@ public class Game {
                 .findFirst()
                 .orElse(null);
     }
+
+    public static int getGameCount() {
+        return gameCount;
+    }
+    public int getQUAFFLE_POINTS(){
+        return QUAFFLE_POINTS;
+    }
+
+    public int getSNITCH_POINTS() {
+        return SNITCH_POINTS;
+    }
+
+    public String getPlaceholder(String play){
+        return play.substring(play.indexOf("<") + 1, play.indexOf(">"));
+    }
+    public String replacePlaceholder(String play, String placeholder, String value){
+
+        return play.replace("<"+placeholder + ">", value);
+    }
+    public void quaffleScore(Team team){
+        setScore(team, getScore(team) + getQUAFFLE_POINTS());
+    }
+    public void catchSnitch(Team team){
+        setScore(team, getScore(team) + getSNITCH_POINTS());
+    }
+
+    public String simulate(String play){
+        String placeholder = getPlaceholder(play);
+        Team team = getRandomTeam();
+        String value = "";
+        if (placeholder.equals(Team.getPositionChaser())){
+            quaffleScore(team);
+        }else if (placeholder.equals(Team.getPositionSeeker())){
+            catchSnitch(team);
+        }else if (placeholder.equals(Team.getPositionKeeper())){
+            value = team.getKeeper();
+        }
+        return replacePlaceholder(play, placeholder, value);
+    }
+
+    public Team getRandomTeam(){
+        Object[] teams = scoreboard.keySet().toArray();
+        return (Team)teams[random(teams.length)];
+    }
+
+    public int random(int range){
+        return (int)(Math.random() * range);
+    }
+
 }
-//TODO Quidditch Part 3 Task 5 https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/13ce475e-f36a-4d92-9e4c-000bf85c0c14
