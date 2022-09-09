@@ -21,6 +21,9 @@ public class Game {
         return this.scoreboard.get(team);
     }
     public void setScore(Team team, Integer score){
+        if (team == null) {
+            throw new IllegalArgumentException("Team cannot be null");
+        }
         scoreboard.put(team, score);
     }
     public Team getTeam(String name){
@@ -53,7 +56,29 @@ public class Game {
     }
     public void catchSnitch(Team team){
         setScore(team, getScore(team) + getSNITCH_POINTS());
+    }
 
+    public String simulate(String play){
+        String placeholder = getPlaceholder(play);
+        Team team = getRandomTeam();
+        String value = "";
+        if (placeholder.equals(Team.getPositionChaser())){
+            quaffleScore(team);
+        }else if (placeholder.equals(Team.getPositionSeeker())){
+            catchSnitch(team);
+        }else if (placeholder.equals(Team.getPositionKeeper())){
+            value = team.getKeeper();
+        }
+        return replacePlaceholder(play, placeholder, value);
+    }
+
+    public Team getRandomTeam(){
+        Object[] teams = scoreboard.keySet().toArray();
+        return (Team)teams[random(teams.length)];
+    }
+
+    public int random(int range){
+        return (int)(Math.random() * range);
     }
 
 }
