@@ -64,8 +64,10 @@ public class Game {
         String value = "";
         if (placeholder.equals(Team.getPositionChaser())){
             quaffleScore(team);
+            value = team.getChasers()[random(team.getChasers().length)];
         }else if (placeholder.equals(Team.getPositionSeeker())){
             catchSnitch(team);
+            value = team.getSeeker();
         }else if (placeholder.equals(Team.getPositionKeeper())){
             value = team.getKeeper();
         }
