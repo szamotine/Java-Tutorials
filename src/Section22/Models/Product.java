@@ -1,6 +1,6 @@
 package Section22.Models;
 
-public class Product {
+public abstract class Product {
     private double price;
     private String color;
     private String brand;
@@ -39,4 +39,12 @@ public class Product {
     public void setBrand(String brand) {
         this.brand = brand;
     }
+    @Override
+    public String toString() {
+        return
+                " price= '" + getPrice() +"'"+
+                " color= '" + getColor() +"'"+
+                " brand= '" + getBrand() +"'";
+    }
+    public abstract void fold();
 }
