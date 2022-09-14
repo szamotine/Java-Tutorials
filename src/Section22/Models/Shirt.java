@@ -51,7 +51,6 @@ public class Shirt extends Product {
                 " size= '" + size + "'" +
                 super.toString() + "}";
     }
-
     @Override
     public void fold() {
         System.out.println("Lay shirt on flat surface");
@@ -59,4 +58,5 @@ public class Shirt extends Product {
         System.out.println("Bring sleeves in");
         System.out.println("Fold from bottom up");
     }
+
 }
