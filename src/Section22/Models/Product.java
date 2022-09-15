@@ -44,14 +44,28 @@ public abstract class Product implements Comparable<Product> {
     @Override
     public String toString() {
         return
-                " price= '" + getPrice() +"'"+
-                " color= '" + getColor() +"'"+
-                " brand= '" + getBrand() +"'";
+                "\t price= '" + getPrice() +"'"+
+                "  \tcolor= '" + getColor() +"'"+
+                "\t brand= '" + getBrand() +"'";
     }
     public abstract void fold();
 
     @Override
     public int compareTo(@NotNull Product o) {
-        return (int)Math.round(this.getPrice() - o.getPrice());
+        //Sorts by class type, then color, then price
+        String className = this.getClass().getSimpleName();
+        String sClassName = o.getClass().getSimpleName();
+        if(!className.equals(sClassName)){
+            return className.compareTo(sClassName);
+        }
+        /*
+        String color = this.getColor();
+        String sColor = o.getColor();
+        if(!color.equals(sColor)){
+            return color.compareTo(sColor);
+        }
+
+         */
+        return Double.compare(this.getPrice(), o.getPrice());
     }
 }

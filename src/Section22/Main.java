@@ -1,44 +1,58 @@
 package Section22;
 
 import Section22.Models.Pants;
+import Section22.Models.Product;
 import Section22.Models.Shirt;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Main {
+    static ArrayList<Product> product = new ArrayList<>();
     public static void main(String[] args){
-        Shirt shirt = new Shirt(Shirt.Size.SMALL, 5.99, "blue", "Java Vuitton" );
-        Pants pants = new Pants(32, 24.99, "blue", "Java Klein");
+        try{
+            getData("products.txt");
+            System.out.println("Products imported successfully");
 
-        Shirt shirt2 = new Shirt(shirt);
-        shirt2.setSize(Shirt.Size.MEDIUM);
-        Pants pants2 = new Pants(pants);
-        pants2.setBrand("Jingles");
-        Pants pants3 = new Pants(34, 104.99, "red", "Jangler");
-        Pants pants4 = new Pants(pants2);
-        pants4.setBrand("Googly");
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Before sort: " + product);
+        Collections.sort(product);
+        System.out.println("After sort: " + product);
+    }
 
-        ArrayList<Pants> PantsList = new ArrayList<Pants>();
-        PantsList.add(pants);
-        PantsList.add(pants2);
-        PantsList.add(pants3);
-        PantsList.add(pants4);
+    public static void getData(String filename) throws FileNotFoundException {
+        String path = "src\\Section22\\" + filename;
 
-        System.out.println(shirt);
-        System.out.println(pants);
-        System.out.println(pants2.getPrice());
-        pants2.discount();
-        System.out.println(pants2.getPrice());
-        System.out.println("CompareTo(): " + pants.compareTo(pants2));
-        System.out.println("CompareTo(): " + pants2.compareTo(pants));
+        FileInputStream fis = new FileInputStream(path);
+        Scanner scanFile = new Scanner(fis);
+        while(scanFile.hasNextLine()){
+            try{
+                String line = scanFile.nextLine();
+                String[] temp = line.split("\\s+");
+                String productType = temp[0];
+                String sizeOrWaist = temp[1];
+                double price = Double.parseDouble(temp[2]);
+                String color = temp[3];
+                String brand = temp[4];
 
-
-        System.out.println("Before Sorting:\n" + PantsList);
-        Collections.sort(PantsList);
-        System.out.println("After Sorting:\n" + PantsList);
-
-
+                if (productType.equalsIgnoreCase("shirt")){
+                    Shirt.Size size = Shirt.Size.valueOf(sizeOrWaist);
+                    product.add(new Shirt(size, price, color, brand));
+                }
+                if(productType.equalsIgnoreCase("pants")){
+                    int waist = Integer.parseInt(sizeOrWaist);
+                    product.add(new Pants(waist, price, color, brand));
+                }
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        scanFile.close();
     }
 }
 
