@@ -41,8 +41,8 @@ public class Pants extends Product implements Discountable{
 
     @Override
     public String toString() {
-        return "{" +
-                " waist= '" + waist + "'" +
+        return "\n{" +
+                "\t waist= '" + waist + "'" +
                 super.toString() + "}";
     }
 

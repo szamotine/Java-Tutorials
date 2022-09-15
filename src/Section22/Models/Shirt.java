@@ -47,8 +47,8 @@ public class Shirt extends Product {
 
     @Override
     public String toString() {
-        return "{" +
-                " size= '" + size + "'" +
+        return "\n{" +
+                "\t size= '" + size + "'" +
                 super.toString() + "}";
     }
     @Override
