@@ -11,14 +11,16 @@ public class Savings extends Account {
     }
 
     @Override
-    public void withdraw(double amount) {
+    public boolean withdraw(double amount) {
+        double withdrawalFee = 5;
+        double balanceMinusAmount = round(getBalance() - amount-withdrawalFee);
 
+        if(balanceMinusAmount>=0){
+            return super.withdraw(amount+withdrawalFee);
+        }
+        return false;
     }
 
-    @Override
-    public void deposit(double amount) {
-
-    }
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + ": " + super.toString();
