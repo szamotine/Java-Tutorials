@@ -1,12 +1,27 @@
 package Section23.Models.Accounts;
 
+import java.text.DecimalFormat;
+
 public abstract class Account {
     private String id;
     private String name;
     private double balance;
 
-    public abstract void withdraw(double amount);
-    public abstract void deposit(double amount);
+    public  boolean withdraw(double amount){
+        amount = round(amount);
+        if (amount >= 0 ) {
+            setBalance(round(getBalance() - amount));
+            return true;
+        }
+        return false;
+    }
+
+    public void deposit(double amount) {
+        if(amount < 0){
+            throw new IllegalArgumentException("Deposit cannot be negative");
+        }
+        setBalance(round(getBalance() + amount));
+    }
 
     public Account(String id, String name, double balance) {
         this.id = id;
@@ -56,5 +71,10 @@ public abstract class Account {
         return  "id= " + id
                 + " \tname= " + name
                 + " \tbalance= " + balance;
+    }
+
+    protected double round(double amount){
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        return Double.parseDouble(formatter.format(amount));
     }
 }
