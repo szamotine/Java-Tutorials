@@ -30,6 +30,9 @@ public class Main {
         for(Account a: accounts){
             bank.addAccount(a);
         }
+        for(Transaction t: transactions){
+            bank.executeTransaction(t);
+        }
 
 
 
@@ -56,12 +59,17 @@ public class Main {
 
         FileInputStream fis = new FileInputStream(path);
         Scanner scanFile = new Scanner(fis);
+
+
         if(filename.equalsIgnoreCase("accounts.txt")){
-            getAccounts(scanFile,filename);
+            //getAccounts(scanFile,filename);
+            inputAccountsDynamic(scanFile);
         }
         if(filename.equalsIgnoreCase("transactions.txt")){
             getTransactions(scanFile,filename);
         }
+
+
         scanFile.close();
     }
 
@@ -111,6 +119,15 @@ public class Main {
         }
     }
 
+    public static void inputAccountsDynamic(Scanner scanFile) throws FileNotFoundException{
+        while(scanFile.hasNextLine()){
+
+            String[] temp = (scanFile.nextLine()).split(",");
+            accounts.add(createAccountObject(temp));
+        }
+
+    }
+
     /**
      * Name: createObject
      * @param values (String[] values)
@@ -119,9 +136,10 @@ public class Main {
      * Inside the function:
      *   1. Dynamically creates a Chequing, Loan, or Savings object based on the values array.
      */
-    public static Account createObject(String[] values){
+    public static Account createAccountObject(String[] values){
         try {
-            return (Account)Class.forName("src.main.model.account." + values[0])
+            String path = "Section23.Models.Accounts.";
+            return (Account)Class.forName(path + values[0])
                     .getConstructor(String.class, String.class, double.class)
                     .newInstance(values[1], values[2], Double.parseDouble(values[3]));
         } catch (Exception e) {
