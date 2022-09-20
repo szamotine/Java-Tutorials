@@ -35,6 +35,12 @@ public class Bank {
     public void withdrawTransaction(Transaction t){
         if(getAccount(t.getBankAccountID()).withdraw(t.getAmount())){
             addTransaction(t);
+        }else{
+            System.out.println("\n------------Transaction Unsuccessful------------\n");
+            System.out.println("Name: " + getAccount(t.getBankAccountID()).getName());
+            System.out.println("Transaction ID: " +  t.getId());
+            System.out.println("Balance: " + getAccount(t.getBankAccountID()).getBalance());
+            System.out.println("Type: " + t.getType() + ", Amount: " + t.getAmount());
         }
     }
 
