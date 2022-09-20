@@ -3,6 +3,11 @@ package Section23.Models.Accounts;
 import Section23.Models.Taxable;
 
 public class Chequing extends Account implements Taxable {
+    private static final double OVERDRAFT_FEE = 5.50;
+    private static final double OVERDRAFT_LIMIT = 200;
+
+    private static final double TAXABLE_INCOME = 3000;
+    private static final double TAX_RATE = 0.15;
 
     public Chequing(String id, String name, double balance) {
         super(id, name, balance);
@@ -11,23 +16,25 @@ public class Chequing extends Account implements Taxable {
     public Chequing(Chequing source) {
         super(source);
     }
+    @Override
+    public Account clone() {
+        return new Chequing(this);
+    }
 
     @Override
     public void deposit(double amount) {
-        amount = calculateTax(amount);
+       // amount = calculateIncomeAfterTax(amount);
         super.deposit(amount);
     }
 
     @Override
     public boolean withdraw(double amount) {
-        double overdraftLimit = 200;
-        double overdraftFee = 5.50;
         double balanceMinusAmount = round(getBalance() - amount);
 
         if(balanceMinusAmount >=0){
             return super.withdraw(amount);
-        }else if(balanceMinusAmount - overdraftFee >= -overdraftLimit ){
-            return super.withdraw(amount + overdraftFee);
+        }else if(balanceMinusAmount - OVERDRAFT_FEE >= -OVERDRAFT_LIMIT ){
+            return super.withdraw(amount + OVERDRAFT_FEE);
         }
         return false;
     }
@@ -38,13 +45,13 @@ public class Chequing extends Account implements Taxable {
     }
 
     @Override
-    public double calculateTax(double amount) {
-        double taxRate = 0.15;
-
-        if(amount > 3000){
-            return amount-amount*taxRate;
-        }else{
-            return amount;
-        }
+    public double calculateIncomeAfterTax(double amount) {
+        double tax = Math.max(0, amount - TAXABLE_INCOME) * TAX_RATE;
+        return amount - tax;
+    }
+    @Override
+    public void tax(double income) {
+        double tax = Math.max(0, income - TAXABLE_INCOME) * TAX_RATE;
+        super.setBalance(super.round(super.getBalance() - tax));
     }
 }
