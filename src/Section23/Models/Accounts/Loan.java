@@ -8,6 +8,10 @@ public class Loan extends Account {
     public Loan(Loan source) {
         super(source);
     }
+    @Override
+    public Account clone() {
+        return new Loan(this);
+    }
 
     @Override
     public String toString() {
@@ -17,10 +21,16 @@ public class Loan extends Account {
     @Override
     public boolean withdraw(double amount) {
         double fixedInterestRate = 1.02;
-        double balanceMinusAmount = round(getBalance() - amount*fixedInterestRate);
-        if(balanceMinusAmount >= -10000){
-            return super.withdraw(amount*fixedInterestRate);
+        double balancePlusAmount = round(getBalance() + amount*fixedInterestRate);
+        if(balancePlusAmount <= 10000){
+            super.deposit(amount*fixedInterestRate);
+            return true;
         }
         return false;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        super.withdraw(amount);
     }
 }

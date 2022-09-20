@@ -7,6 +7,8 @@ public abstract class Account {
     private String name;
     private double balance;
 
+    public abstract Account clone();
+
     public  boolean withdraw(double amount){
         amount = round(amount);
         if (amount >= 0 ) {

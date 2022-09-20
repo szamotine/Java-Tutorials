@@ -3,6 +3,7 @@ package Section23.Models;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Transaction implements Comparable<Transaction> {
     private String id;
@@ -11,7 +12,7 @@ public class Transaction implements Comparable<Transaction> {
     private TransactionType type;
     public enum TransactionType {
         WITHDRAW,
-        DEPOSIT;
+        DEPOSIT
 
     }
     private double amount;
@@ -22,6 +23,9 @@ public class Transaction implements Comparable<Transaction> {
     }
 
     public Transaction(String id, String type, String bankAccountID, double amount) {
+        checkParam(id);
+        checkParam(bankAccountID);
+        checkParam(amount);
         this.id = id;
         this.amount = amount;
         this.type = checkType(type);
@@ -39,6 +43,8 @@ public class Transaction implements Comparable<Transaction> {
         long transID = Long.parseLong(transactionID);
         transID ++;
         setTransactionID(transID);
+        checkParam(bankAccountID);
+        checkParam(amount);
         this.amount = amount;
         this.type = checkType(type);
         this.timeStamp = new Timestamp(new java.util.Date().getTime());
@@ -50,21 +56,26 @@ public class Transaction implements Comparable<Transaction> {
     }
 
     public void setId(String id) {
+        checkParam(id);
         this.id = id;
     }
-
+    public String getBankAccountID() {
+        return bankAccountID;
+    }
+    public void setBankAccountID(String bankAccountID) {
+        checkParam(bankAccountID);
+        this.bankAccountID = bankAccountID;
+    }
     public double getAmount() {
         return amount;
     }
-
     public void setAmount(double amount) {
+        checkParam(amount);
         this.amount = amount;
     }
-
     public Timestamp getTimeStamp() {
         return timeStamp;
     }
-
     public TransactionType getType() {
         return type;
     }
@@ -83,7 +94,7 @@ public class Transaction implements Comparable<Transaction> {
 
     @Override
     public String toString() {
-        return "Transaction{"
+        return "\nTransaction{"
                 + "id='" + id + '\''
                 + ", type='" + type + '\''
                 + ", account='" + bankAccountID + '\''
@@ -95,6 +106,12 @@ public class Transaction implements Comparable<Transaction> {
     public int compareTo(@NotNull Transaction o) {
         return this.timeStamp.compareTo(o.getTimeStamp());
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,type,bankAccountID,amount);
+    }
+
     public TransactionType checkType(String type){
         if(String.valueOf(TransactionType.DEPOSIT).equalsIgnoreCase(type)){
             return TransactionType.DEPOSIT;
@@ -103,5 +120,15 @@ public class Transaction implements Comparable<Transaction> {
             return TransactionType.WITHDRAW;
         }
         throw new IllegalArgumentException("Transaction type must be Withdraw or Deposit");
+    }
+    public void checkParam(String param){
+        if(param == null || param.isBlank()){
+            throw new IllegalArgumentException("Field cannot be null or blank");
+        }
+    }
+    public void checkParam(double param){
+        if(param < 0){
+            throw new IllegalArgumentException("Field cannot be less than zero");
+        }
     }
 }

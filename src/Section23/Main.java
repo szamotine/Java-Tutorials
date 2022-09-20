@@ -10,28 +10,44 @@ import Section23.Models.Transaction;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    static final String ACCOUNT_LIST = "accounts.txt";
+    static final String TRANSACTION_LIST  = "transactions.txt";
 
-    static Bank bank = new Bank();
     static List<Account> accounts = new ArrayList<>();
     static List<Transaction> transactions = new ArrayList<>();
+    static Bank bank;
     public static void main(String[] args) throws FileNotFoundException {
 
 
-        getData("accounts.txt");
+        getData(ACCOUNT_LIST);
+        getData(TRANSACTION_LIST);
+        bank = new Bank();
+
+        for(Account a: accounts){
+            bank.addAccount(a);
+        }
+
+
+
+
+
+
+        /*
+        bank.addAccount(accounts.get(0));
+        bank.addTransaction(transactions.get(0));
         System.out.println("\n\n ------Printing all accounts------");
         accounts.forEach(System.out::println);
-        getData("transactions.txt");
+
         System.out.println("\n\n ------Printing all Transactions------");
         transactions.forEach(System.out::println);
         Collections.sort(transactions);
         System.out.println("\n\n ------Printing all sorted Transactions------");
         transactions.forEach(System.out::println);
-
+        */
 
     }
 
@@ -79,7 +95,7 @@ public class Main {
 
                 if(accountType.equalsIgnoreCase("chequing")){
                     Chequing tempAccount = new Chequing(accountID,name, balance);
-                   System.out.println(tempAccount);
+                  // System.out.println(tempAccount);
                     accounts.add(tempAccount);
 
                 }
@@ -95,4 +111,22 @@ public class Main {
         }
     }
 
+    /**
+     * Name: createObject
+     * @param values (String[] values)
+     * @return Account
+     *
+     * Inside the function:
+     *   1. Dynamically creates a Chequing, Loan, or Savings object based on the values array.
+     */
+    public static Account createObject(String[] values){
+        try {
+            return (Account)Class.forName("src.main.model.account." + values[0])
+                    .getConstructor(String.class, String.class, double.class)
+                    .newInstance(values[1], values[2], Double.parseDouble(values[3]));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

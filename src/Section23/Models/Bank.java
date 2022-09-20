@@ -1,38 +1,75 @@
 package Section23.Models;
 
 import Section23.Models.Accounts.Account;
+import Section23.Models.Accounts.Chequing;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Bank {
-    private Map <String, Account> accounts;
-    private List<Account> accountList;
-    private List<Transaction> transactionList;
-    public Bank(){
-        accounts = new HashMap<>();
+    private List<Account> accounts;
+    private List<Transaction> transactions;
 
+    public Bank() {
+        this.accounts = new ArrayList<>();
+        this.transactions = new ArrayList<>();
     }
-
-    public Map<String, Account> getAccounts() {
-        return accounts;
+    public void addAccount(Account a){
+        this.accounts.add(a.clone());
+        //System.out.println("Successfully added " + a);
     }
-
-    public void setAccounts(Map<String, Account> accounts) {
-        this.accounts = accounts;
+    private void addTransaction(Transaction t){
+        this.transactions.add(new Transaction(t));
+        //System.out.println("Successfully added " + t);
     }
-
-    public Account getAccount(String id) {
-        return accounts.get(id);
+    public Transaction[] getTransactions(String bankAccountID){
+        return this.transactions.stream().filter(transaction -> transaction.getBankAccountID().equals(bankAccountID)).toArray(Transaction[]::new);
     }
-    public void addAccount(String id, Account source) {
-        if(source == null){
-            throw new IllegalArgumentException("Account cannot be null");
+    public Account getAccount(String bankAccountID){
+        return this.accounts.stream().
+                filter(account -> account.getId().equals(bankAccountID))
+                .findFirst()
+                .orElse(null);
+    }
+    public void withdrawTransaction(Transaction t){
+        if(getAccount(t.getBankAccountID()).withdraw(t.getAmount())){
+            addTransaction(t);
         }
-        accounts.put(id, source);
     }
-    public boolean verifyAccountID(String accountID){
-        return accounts.containsKey(accountID);
+
+    public void depositTransaction(Transaction t){
+       getAccount(t.getBankAccountID()).deposit(t.getAmount());
+       addTransaction(t);
+    }
+
+    public void executeTransaction(Transaction t){
+        switch(t.getType()){
+            case DEPOSIT:
+                depositTransaction(t);
+                break;
+            case WITHDRAW:
+                withdrawTransaction(t);
+                break;
+        }
+    }
+    private double getIncome(Taxable account){
+        Transaction[] transactions = getTransactions(((Chequing)account).getId());
+        return Arrays.stream(transactions).mapToDouble(transaction -> {
+            switch(transaction.getType()){
+                case WITHDRAW: return -transaction.getAmount();
+                case DEPOSIT: return transaction.getAmount();
+                default: return 0;
+            }
+        }).sum();
+    }
+
+    public void deductTaxes(){
+        for(Account a : accounts){
+            if (Taxable.class.isAssignableFrom(a.getClass())){
+                Taxable taxable = (Taxable) a;
+                taxable.tax(getIncome(taxable));
+            }
+        }
     }
 }
