@@ -1,7 +1,4 @@
-package src.main.model.account;
+package StockSimulation.Account;
 
 public abstract class Account {
-
-
-
 }

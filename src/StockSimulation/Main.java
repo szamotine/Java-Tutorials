@@ -1,20 +1,19 @@
-package src.main;
+package StockSimulation;
 
-import java.nio.file.Path;
+import StockSimulation.Account.Account;
+import StockSimulation.utils.Color;
+
 import java.util.Scanner;
-
-import src.main.model.account.Account;
-import src.main.utils.Color;
 
 public class Main {
 
-    static Account account; 
+    static Account account;
     static final double INITIAL_DEPOSIT = 4000;
     static Scanner scanner = new Scanner(System.in);
-  
-    public static void main(String[] args) {    
 
-      
+    public static void main(String[] args) {
+
+
     }
 
     public static void explainApp() {
@@ -24,7 +23,7 @@ public class Main {
         System.out.println(Color.YELLOW + "Every trade (buy/sell) made from a TFSA is charged a 1% fee.\n");
         System.out.println(Color.BLUE + " - Neither account has a limit on the amount of trades that can be made." + Color.RESET);
     }
-    
+
     public static void initialBalance() {
         System.out.print("\n\n  You created a " + Color.YELLOW + account.getClass().getSimpleName() + Color.RESET + " account.");
         System.out.println(" Your account balance is " + Color.GREEN + "$" + "<account.getFunds()>" + Color.RESET);
@@ -42,8 +41,8 @@ public class Main {
         }
         return choice;
     }
-    
-    
+
+
     public static String buyOrSell() {
         System.out.print("\n\n  Would you like to 'buy' or 'sell': ");
         String choice = scanner.nextLine();
@@ -56,7 +55,7 @@ public class Main {
 
     public static String chooseStock() {
         System.out.print("  Choose a stock: ");
-        String stock = scanner.nextLine(); 
+        String stock = scanner.nextLine();
         while (!stock.equals("AAPL") && !stock.equals("FB") && !stock.equals("GOOG") && !stock.equals("TSLA") ) {
             System.out.print("  Choose a stock: ");
             stock = scanner.nextLine();
@@ -66,7 +65,7 @@ public class Main {
 
     public static int numShares(String choice) {
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
-        int shares = scanner.nextInt(); 
+        int shares = scanner.nextInt();
         scanner.nextLine(); //throwaway nextLine
         while (shares <= 0) {
             System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
@@ -76,7 +75,7 @@ public class Main {
         }
         return shares;
     }
-    
+
     /* TODO
     public static void displayPrices(int day) {
         System.out.println("\n\n\t  DAY " + day + " PRICES\n");
@@ -94,8 +93,8 @@ public class Main {
         System.out.print("\n  Press anything to continue");
         scanner.nextLine();
     }
-    
-    
+
+
     /* TODO
     public static String getPrice(Stock stock, int day) {
         return "15.2343";

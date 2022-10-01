@@ -33,7 +33,6 @@ public class Main {
      *   4. Maps every element in the stream to a double (price * quantity).
      *   5. Applies the terminal operation average.
      *   6. Returns the average as double.
-     *
      */
     public static double average(){
         try{
