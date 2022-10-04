@@ -16,23 +16,19 @@ public abstract class Account {
     private double funds;
 
     public Account(double amount) {
-        this.portfolio = new HashMap<Stock.StockName, Integer>();
+        this.portfolio = new HashMap<>();
         this.funds = amount;
-
-        //TODO: add list of stocks, initialize at zero
-        /*
-        portfolio.put(AAPL, 0);
-        portfolio.put(FB, 0);
-        portfolio.put(GOOG, 0);
-        portfolio.put(TSLA, 0);
-
-         */
     }
 
     public Account(Account source) {
-        //TODO: Copy Constructor
-        //this.portfolio = new HashMap<Stock.StockName, Integer>(Map.copyOf(source.portfolio));
+
+        this.portfolio = new HashMap<Stock.StockName, Integer>(Map.copyOf(source.portfolio));
         this.funds = source.funds;
+    }
+
+    public void addStock(Stock stock, int numberOfShares){
+        if(stock == null || numberOfShares < 0) throw new IllegalArgumentException("Error: Account.addStock()");
+        this.portfolio.put(stock.getName(), numberOfShares);
     }
 
     public boolean transaction(Stock stock, Trade.Type type){
@@ -52,7 +48,7 @@ public abstract class Account {
 
         portfolio.put(stock.getName(), availableShares-numberOfShares);
 
-        funds += stock.getPrice() * numberOfShares;
+        funds += round(stock.getPrice() * numberOfShares);
 
         return true;
 
@@ -70,7 +66,14 @@ public abstract class Account {
     }
 
     private String displayPortfolio() {
-        return null;
+
+        StringBuilder temp = new StringBuilder();
+        for(Map.Entry<Stock.StockName,Integer> m : portfolio.entrySet() ){
+            if(m.getValue() > 0){
+                temp.append("\n  " + Color.BLUE).append(m.getKey()).append("\t\t").append(Color.GREEN).append(m.getValue());
+            }
+        }
+        return temp.toString();
     }
 
     protected double round(double amount){

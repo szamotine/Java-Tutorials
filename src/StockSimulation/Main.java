@@ -24,12 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        explainApp();
-        initializeAccount(accountChoice());
-        initialBalance();
-        initializeStocks();
-
-
+        initialize();
 
         for(int day = 1; day <= 2160; day ++){
 
@@ -46,6 +41,14 @@ public class Main {
         scanner.close();
     }
 
+    public static void initialize(){
+
+        explainApp();
+        initializeStocks();
+        initializeAccount(accountChoice());
+        initialBalance();
+
+    }
     public static void explainApp() {
         System.out.print(Color.BLUE + "\n - PERSONAL: ");
         System.out.println(Color.YELLOW + "Every sale made in a personal account is charged a 5% fee.");
@@ -73,6 +76,9 @@ public class Main {
         }
         if(type.equalsIgnoreCase("b")){
             account = new TFSA(INITIAL_DEPOSIT);
+        }
+        for(Stock s : stocks){
+            account.addStock(s,0);
         }
     }
 
