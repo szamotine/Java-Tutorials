@@ -1,12 +1,23 @@
 package StockSimulation.Model.Account;
 
-public class TFSA extends Account {
+import StockSimulation.Model.Trade;
 
-    private final double BUY_TRADE_FEE = 0.01;
-    private final double SELL_TRADE_FEE = 0.01;
+public class TFSA extends Account {
 
     public TFSA(double amount) {
         super(amount);
-        //System.out.println("TFSA account created");
+    }
+
+    @Override
+    public boolean ExecuteTrade(Trade trade) {
+
+        if(trade.getType().equals(Trade.Type.MARKET_SELL)){
+            trade.setTradeTax(0.01);
+        }
+        else{
+            trade.setTradeTax(1.01);
+        }
+
+        return super.ExecuteTrade(trade);
     }
 }
