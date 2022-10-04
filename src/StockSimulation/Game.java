@@ -10,6 +10,7 @@ import StockSimulation.utils.Color;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,48 +28,55 @@ public class Game {
     Stock chosenStock;
     int numShares;
     Trade trade;
+    boolean flag;
+
 
 
     public Game() {
         initialize();
+        getPriceList();
     }
 
     public void play(){
 
         while(day <=2160){
+            flag = true;
+            do{
+                displayPrices(day);
+                buyOrSell = buyOrSell();
+                if(buyOrSell.equals("skip")){
+                    day += skipDay();
+                   break;
+                }
+                if(buyOrSell.equals("exit")) System.exit(0);
 
-            displayPrices(day);
+                stock = chooseStock();
+                chosenStock = findStock(stock);
+
+                numShares = numShares(chosenStock, buyOrSell);
+                trade = new Trade(chosenStock,buyOrSell, numShares);
+                tradeStatus(account.ExecuteTrade(trade));
+                System.out.println("Do you want to make any other transactions for this day?");
+                String choice = scanner.nextLine();
+                if(choice.equals("no")){
+                    flag = false;
+                }
 
 
-            buyOrSell = buyOrSell();
-
-            if(buyOrSell.equals("skip")){
-                day ++;
-                continue;
-            }
-            if(buyOrSell.equals("exit")) break;
-
-            stock = chooseStock();
-            chosenStock = findStock(stock);
-            numShares = numShares(stock);
-            trade = new Trade(chosenStock,buyOrSell, numShares);
-            tradeStatus(account.ExecuteTrade(trade));
-            System.out.println("Loop complete" );
-
+            }while(flag);
 
             day ++;
         }
-
-
+        System.out.println("Congratulations, you've reached the end of the game");
 
         scanner.close();
-
     }
 
 
-    public static void initialize(){
+    private void initialize(){
 
         day = 1;
+        flag = true;
         explainApp();
         initializeStocks();
         initializeAccount(accountChoice());
@@ -105,7 +113,7 @@ public class Game {
             account = new TFSA(INITIAL_DEPOSIT);
         }
         for(Stock s : stocks){
-            account.addStock(s,0);
+            account.initializeStock(s,0);
         }
     }
 
@@ -128,7 +136,7 @@ public class Game {
 
 
     public static String buyOrSell() {
-        System.out.print("\n\n  Would you like to 'buy' or 'sell' or 'skip': ");
+        System.out.print( Color.RESET + "\n\n   Would you like to 'buy' or 'sell' or 'skip': ");
         String choice = scanner.nextLine();
         while (!choice.equals("buy") && !choice.equals("sell") && !choice.equals("skip") && !choice.equals("exit")) {
             System.out.print("  Would you like to 'buy' or 'sell' or 'skip': ");
@@ -138,6 +146,7 @@ public class Game {
     }
 
     public static String chooseStock() {
+        System.out.println(account);
         System.out.print("  Choose a stock: ");
         String stock = scanner.nextLine();
         while (!stock.equals("AAPL") && !stock.equals("FB") && !stock.equals("GOOG") && !stock.equals("TSLA") ) {
@@ -153,7 +162,9 @@ public class Game {
                 .findFirst().orElse(null);
     }
 
-    public static int numShares(String choice) {
+    public static int numShares(Stock stock, String choice) {
+        System.out.println(account);
+        checkMax(stock);
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
         int shares = scanner.nextInt();
         scanner.nextLine(); //throwaway nextLine
@@ -171,7 +182,7 @@ public class Game {
 
         for (Stock s:stocks ) {
             String price = getPrice(s, day);
-            System.out.println("  " + Color.BLUE + s.getName() + "\t\t" + Color.GREEN + price);
+            System.out.println("  " + Color.BLUE + s.getName() + "\t\t" + Color.GREEN + price + Color.RESET);
             if(price != null){
                 s.setPrice(Double.parseDouble(price));
             }
@@ -179,13 +190,14 @@ public class Game {
         }
     }
 
-    public static void tradeStatus(boolean result) {
+    public static boolean tradeStatus(boolean result) {
         String r = result ? "successful" : "unsuccessful";
 
-        System.out.println("\n  The trade was " + (result ? Color.GREEN : Color.RED) + r + Color.RESET + ". Here is your portfolio:");
+        System.out.println(Color.RESET + "\n  The trade was " + (result ? Color.GREEN : Color.RED) + r + Color.RESET + ". \n\tHere is your portfolio:\n");
         System.out.println(account);
         System.out.print("\n  Press anything to continue");
         scanner.nextLine();
+        return result;
     }
 
     public static String getPrice(Stock stock, int day) {
@@ -205,6 +217,16 @@ public class Game {
         }
         return null;
     }
+    public static void getPriceList(){
+
+
+    }
+    public static int skipDay(){
+        System.out.print("\n\n  How many days would you like to skip: ");
+        return Integer.parseInt(scanner.nextLine());
+
+
+    }
 
     public static Path getPath(String stock) {
         String filename = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\StockSimulation\\Data\\" + stock + ".csv";
@@ -217,5 +239,18 @@ public class Game {
             return null;
         }
 
+    }
+
+    public static void checkMax(Stock stock){
+
+        double m = round(account.getFunds()/stock.getPrice());
+        int max = (int) m-1;
+        System.out.println( Color.RESET + "The max amount of " + Color.BLUE + stock.getName() + Color.RESET + " that you can purchase is: " + Color.GREEN + max + Color.RESET);
+
+
+    }
+    public static double round(double amount) {
+        DecimalFormat formatter = new DecimalFormat("##");
+        return Double.parseDouble(formatter.format(amount));
     }
 }

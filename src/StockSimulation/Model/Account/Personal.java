@@ -1,12 +1,19 @@
 package StockSimulation.Model.Account;
 
-public class Personal extends Account {
+import StockSimulation.Model.Trade;
 
-    private final double SELL_TRADE_FEE = 0.05;
+public class Personal extends Account {
 
     public Personal(double amount) {
         super(amount);
-        //System.out.println("Personal account created");
     }
 
+    @Override
+    public boolean ExecuteTrade(Trade trade) {
+
+        if(trade.getType().equals(Trade.Type.MARKET_SELL)){
+            trade.setTradeTax(0.05);
+        }
+        return super.ExecuteTrade(trade);
+    }
 }

@@ -30,63 +30,54 @@ public abstract class Account implements ITrade {
     public boolean ExecuteTrade(Trade trade) {
 
         if (trade.getType().equals(Trade.Type.MARKET_SELL)){
-            return sellShares(trade.getStock(), trade.getNumberOfShares());
+            return sellShares(trade);
 
         }else{
-            return buyShares(trade.getStock(), trade.getNumberOfShares());
+            return buyShares(trade);
         }
-
     }
 
-    public void addStock(Stock stock, int numberOfShares){
-        if(stock == null || numberOfShares < 0) throw new IllegalArgumentException("Error: Account.addStock()");
+    public void initializeStock(Stock stock, int numberOfShares){
+        if(stock == null || numberOfShares < 0) throw new IllegalArgumentException("Error: Account.initializeStock()");
         this.portfolio.put(stock.getName(), numberOfShares);
     }
 
+    public boolean sellShares(Trade trade){
 
-    public boolean sellShares(Stock stock,int numberOfShares){
+        int availableShares = getInventory(trade.getStock());
 
-        int availableShares = getInventory(stock);
-
-        if(availableShares < numberOfShares){
+        if(availableShares < trade.getNumberOfShares()){
             return false;
-            //throw new IllegalArgumentException("Error: number of shares in Account.sellShares()");
         }
 
-        portfolio.put(stock.getName(), availableShares-numberOfShares);
-
-        funds += round(stock.getPrice() * numberOfShares);
-
+        portfolio.put(trade.getStock().getName(), availableShares-trade.getNumberOfShares());
+        double amount = round(trade.getStock().getPrice() * trade.getNumberOfShares());
+        double tax = round(amount * trade.getTradeTax());
+        funds += round(amount-tax);
         return true;
-
     }
     public int getInventory(Stock stock){
         return this.portfolio.get(stock.getName());
     }
 
-    public boolean buyShares(Stock stock, int numberOfShares){
-        double price = round(numberOfShares * stock.getPrice());
+    public boolean buyShares(Trade trade){
+        double price = round(trade.getNumberOfShares() * trade.getStock().getPrice() * trade.getTradeTax());
 
         if(price < funds){
-            portfolio.put(stock.getName(), portfolio.get(stock.getName()) + numberOfShares);
+            portfolio.put(trade.getStock().getName(), portfolio.get(trade.getStock().getName()) + trade.getNumberOfShares());
             funds -= price;
             return true;
         }
-
         return false;
-
     }
-
     public String toString() {
         return "\n  Stock\t\t"  + Color.RESET + "Shares" +
-                "\n\n" + displayPortfolio() + Color.RESET +
+                  displayPortfolio() + Color.RESET +
                 "\n  Funds Left\t" + Color.GREEN + "$" + round(this.getFunds()) + Color.RESET;
     }
-
     public double getFunds() {
         return this.funds;
     }
-
     private String displayPortfolio() {
 
         StringBuilder temp = new StringBuilder();
@@ -97,7 +88,6 @@ public abstract class Account implements ITrade {
         }
         return temp.toString();
     }
-
     protected double round(double amount){
         DecimalFormat formatter = new DecimalFormat("#.##");
         return Double.parseDouble(formatter.format(amount));

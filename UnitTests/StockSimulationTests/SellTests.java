@@ -53,7 +53,7 @@ public class SellTests {
             s.setPrice(10);
             //Set each account inventory to 10 of each stock
             for(Account a : accounts){
-                a.addStock(s,10);
+                a.initializeStock(s,10);
             }
         }
 
@@ -64,7 +64,6 @@ public class SellTests {
 
     @Test
     public void Test_PersonalAccountPurchaseShare_SharesDecrease(){
-
 
         assertEquals(10,personal.getInventory(sell.getStock()) );
         assertTrue(personal.ExecuteTrade(sell));
@@ -99,10 +98,17 @@ public class SellTests {
     }
     @Test
     public void Personal_AccountShareSale_FundsIncreaseTradeFeeApplied(){
+        assertEquals(INITIAL_DEPOSIT,personal.getFunds());
+        assertTrue(personal.ExecuteTrade(sell));
+        assertEquals(1047.5,personal.getFunds());
 
     }
     @Test
     public void TFSA_AccountShareSale_FundsIncreaseTradeFeeApplied(){
+
+        assertEquals(INITIAL_DEPOSIT,TFSA.getFunds());
+        assertTrue(TFSA.ExecuteTrade(sell));
+        assertEquals(1049.5,TFSA.getFunds());
 
     }
 

@@ -55,7 +55,7 @@ public class BuyTests {
             s.setPrice(10);
             //Set each account inventory to 10 of each stock
             for(Account a : accounts){
-                a.addStock(s,10);
+                a.initializeStock(s,10);
             }
         }
 
@@ -100,6 +100,10 @@ public class BuyTests {
     }
     @Test
     public void TFSA_AccountSharePurchase_FundsDecreaseTradeFeeApplied(){
+
+        assertEquals(1000.00,TFSA.getFunds() );
+        assertTrue(TFSA.ExecuteTrade(buy));
+        assertEquals(949.50, TFSA.getFunds());
 
     }
 }
