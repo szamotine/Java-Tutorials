@@ -16,7 +16,7 @@ public class Trade {
             throw new IllegalArgumentException("Error: wrong type in Trade()");
         }
         if (tType.equals("buy")) type = Type.MARKET_BUY;
-        if (tType.equals("sell")) type = Type.MARKET_BUY;
+        if (tType.equals("sell")) type = Type.MARKET_SELL;
 
         if(numberOfShares < 0){
             throw new IllegalArgumentException("Error: number of shares in Trade()");

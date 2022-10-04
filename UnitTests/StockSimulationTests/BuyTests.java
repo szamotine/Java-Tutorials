@@ -15,28 +15,29 @@ import java.util.List;
 import static junit.framework.TestCase.*;
 
 public class BuyTests {
+    //#region Member Declarations
     List<Account> accounts;
     Account personal;
-    Account tfsa;
+    Account TFSA;
     List<Stock> stocks;
     static final double INITIAL_DEPOSIT = 1000;
     Stock FB;
     Stock AAPL;
     Stock GOOG;
     Stock TSLA;
-
     Trade sell;
-
     Trade buy;
+
+    //#endregion
 
     @Before
     public void setup(){
 
         accounts = new ArrayList<>();
         personal = new Personal(INITIAL_DEPOSIT);
-        tfsa = new TFSA(INITIAL_DEPOSIT);
+        TFSA = new TFSA(INITIAL_DEPOSIT);
         accounts.add(personal);
-        accounts.add(tfsa);
+        accounts.add(TFSA);
 
         FB = new Stock(Stock.StockName.FB);
         AAPL = new Stock(Stock.StockName.AAPL);
@@ -70,24 +71,23 @@ public class BuyTests {
         assertTrue(personal.ExecuteTrade(buy));
         assertEquals(15, personal.getInventory(buy.getStock()));
     }
-
     @Test
     public void Test_TFSAAccountPurchaseShare_SharesIncrease(){
-        assertEquals(10,tfsa.getInventory(buy.getStock()) );
-        assertTrue(tfsa.ExecuteTrade(buy));
-        assertEquals(15, tfsa.getInventory(buy.getStock()));
+        assertEquals(10, TFSA.getInventory(buy.getStock()));
+        assertTrue(TFSA.ExecuteTrade(buy));
+        assertEquals(15, TFSA.getInventory(buy.getStock()));
     }
     @Test
     public void PurchaseWithInsufficientFunds_NoSharesAdded(){
         buy.setNumberOfShares(101);
 
-        assertEquals(10,tfsa.getInventory(buy.getStock()) );
+        assertEquals(10, TFSA.getInventory(buy.getStock()));
         assertEquals(10,personal.getInventory(buy.getStock()) );
 
         assertFalse(personal.ExecuteTrade(buy));
-        assertFalse(tfsa.ExecuteTrade(buy));
+        assertFalse(TFSA.ExecuteTrade(buy));
 
-        assertEquals(10,tfsa.getInventory(buy.getStock()) );
+        assertEquals(10, TFSA.getInventory(buy.getStock()));
         assertEquals(10,personal.getInventory(buy.getStock()) );
 
     }
@@ -99,7 +99,7 @@ public class BuyTests {
 
     }
     @Test
-    public void TFSAAccountSharePurchase_FundsDecreaseTradeFeeApplied(){
+    public void TFSA_AccountSharePurchase_FundsDecreaseTradeFeeApplied(){
 
     }
 }

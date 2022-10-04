@@ -21,29 +21,46 @@ public class Game {
     static final double INITIAL_DEPOSIT = 4000;
     static Scanner scanner = new Scanner(System.in);
 
+    static int day;
+    String buyOrSell;
+    String stock;
+    Stock chosenStock;
+    int numShares;
+    Trade trade;
+
+
     public Game() {
         initialize();
     }
 
     public void play(){
 
-
-
-        for(int day = 1; day <= 2160; day ++){
+        while(day <=2160){
 
             displayPrices(day);
 
 
-            String buyOrSell = buyOrSell();
-            if(buyOrSell.equals("skip")) continue;
+            buyOrSell = buyOrSell();
+
+            if(buyOrSell.equals("skip")){
+                day ++;
+                continue;
+            }
             if(buyOrSell.equals("exit")) break;
-            String stock = chooseStock();
-            Stock chosenStock = findStock(stock);
-            int numShares = numShares(stock);
-            Trade trade = new Trade(chosenStock,buyOrSell, numShares);
+
+            stock = chooseStock();
+            chosenStock = findStock(stock);
+            numShares = numShares(stock);
+            trade = new Trade(chosenStock,buyOrSell, numShares);
             tradeStatus(account.ExecuteTrade(trade));
             System.out.println("Loop complete" );
+
+
+            day ++;
         }
+
+
+
         scanner.close();
 
     }
@@ -51,6 +68,7 @@ public class Game {
 
     public static void initialize(){
 
+        day = 1;
         explainApp();
         initializeStocks();
         initializeAccount(accountChoice());
