@@ -1,6 +1,6 @@
 package StockSimulationTests;
 
-import StockSimulation.Account.Account;
+import StockSimulation.Model.Account.Account;
 
 public class SellTests {
     Account[] accounts;

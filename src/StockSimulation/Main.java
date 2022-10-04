@@ -1,9 +1,16 @@
 package StockSimulation;
 
-import StockSimulation.Account.Account;
+import StockSimulation.Model.Account.Account;
+import StockSimulation.Model.Account.Personal;
+import StockSimulation.Model.Account.TFSA;
+import StockSimulation.Model.Trade.Stock;
 import StockSimulation.utils.Color;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
+//TODO https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/d10bc2a7-40e9-47a2-88f4-38cb3614724a
 
 public class Main {
 
@@ -11,8 +18,27 @@ public class Main {
     static final double INITIAL_DEPOSIT = 4000;
     static Scanner scanner = new Scanner(System.in);
 
+
     public static void main(String[] args) {
-//TODO https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/d10bc2a7-40e9-47a2-88f4-38cb3614724a
+
+        explainApp();
+        initializeAccount(accountChoice());
+        initialBalance();
+
+
+
+        for(int day = 1; day <= 2160; day ++){
+
+            displayPrices(day);
+            /*
+
+            String choice = buyOrSell();
+            if(choice.equals("skip")) continue;
+            String stock = chooseStock();
+
+             */
+        }
+
 
 
     }
@@ -25,16 +51,25 @@ public class Main {
         System.out.println(Color.BLUE + " - Neither account has a limit on the amount of trades that can be made." + Color.RESET);
     }
 
+    public static void initializeAccount(String type){
+        if(type.equalsIgnoreCase("a")){
+            account = new Personal(INITIAL_DEPOSIT);
+        }
+        if(type.equalsIgnoreCase("b")){
+            account = new TFSA(INITIAL_DEPOSIT);
+        }
+    }
+
     public static void initialBalance() {
         System.out.print("\n\n  You created a " + Color.YELLOW + account.getClass().getSimpleName() + Color.RESET + " account.");
-        System.out.println(" Your account balance is " + Color.GREEN + "$" + "<account.getFunds()>" + Color.RESET);
+        System.out.println(" Your account balance is " + Color.GREEN + "$" + account.getFunds() + Color.RESET);
         System.out.print("\n  Enter anything to start trading: ");
         scanner.nextLine();
     }
 
 
     public static String accountChoice() {
-        System.out.print("\n  Respectively, type 'a' or 'b' to create a Personal account or TFSA: ");
+        System.out.print("\n  Type 'a' to create a Personal account or 'b' to create a TFSA account: ");
         String choice = scanner.nextLine();
         while (!choice.equals("a") && !choice.equals("b")) {
             System.out.print("  Respectively, type 'a' or 'b' to create a Personal account or TFSA: ");
@@ -45,10 +80,10 @@ public class Main {
 
 
     public static String buyOrSell() {
-        System.out.print("\n\n  Would you like to 'buy' or 'sell': ");
+        System.out.print("\n\n  Would you like to 'buy' or 'sell' or 'skip': ");
         String choice = scanner.nextLine();
-        while (!choice.equals("buy") && !choice.equals("sell")) {
-            System.out.print("  Would you like to 'buy' or 'sell': ");
+        while (!choice.equals("buy") && !choice.equals("sell") && !choice.equals("skip")) {
+            System.out.print("  Would you like to 'buy' or 'sell' or 'skip': ");
             choice = scanner.nextLine();
         }
         return choice;
@@ -77,7 +112,7 @@ public class Main {
         return shares;
     }
 
-    /* TODO
+    ///* TODO
     public static void displayPrices(int day) {
         System.out.println("\n\n\t  DAY " + day + " PRICES\n");
 
@@ -87,7 +122,7 @@ public class Main {
         System.out.println("  " + Color.BLUE + Stock.TSLA + "\t\t" + Color.GREEN + getPrice(Stock.TSLA, day) + Color.RESET);
 
     }
-    */
+   // */
     public static void tradeStatus(String result) {
         System.out.println("\n  The trade was " + (result.equals("successful") ? Color.GREEN : Color.RED) + result + Color.RESET + ". Here is your portfolio:");
         System.out.println(account);
@@ -96,16 +131,39 @@ public class Main {
     }
 
 
-    /* TODO
+   // /* TODO
     public static String getPrice(Stock stock, int day) {
-        return "15.2343";
-    }
+        Path p = getPath(stock.toString());
 
+        try{
+            String[] result = Files.lines(p)
+                    .map(line -> line.split(","))
+                    .filter(r -> r[0].equals(String.valueOf(day)))
+                    .findFirst().orElse(null);
+            if (result != null) {
+                return result[1];
+            }
 
-    public static Path getPath(String stock) {
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
         return null;
     }
-    */
+ //*/
+
+    public static Path getPath(String stock) {
+        String filename = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\StockSimulation\\Data\\" + stock + ".csv";
+        try{
+            return Paths.get(filename);
+            //return Paths.get(Thread.currentThread().getContextClassLoader().getResource("src/StockSimulation/data/"+stock+".csv").toURI());
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+    }
+
 
 
 }
