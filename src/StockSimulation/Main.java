@@ -3,18 +3,21 @@ package StockSimulation;
 import StockSimulation.Model.Account.Account;
 import StockSimulation.Model.Account.Personal;
 import StockSimulation.Model.Account.TFSA;
-import StockSimulation.Model.Trade.Stock;
+import StockSimulation.Model.Stock;
 import StockSimulation.utils.Color;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 //TODO https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/d10bc2a7-40e9-47a2-88f4-38cb3614724a
 
 public class Main {
 
     static Account account;
+    static List<Stock> stocks;
     static final double INITIAL_DEPOSIT = 4000;
     static Scanner scanner = new Scanner(System.in);
 
@@ -24,23 +27,23 @@ public class Main {
         explainApp();
         initializeAccount(accountChoice());
         initialBalance();
+        initializeStocks();
 
 
 
         for(int day = 1; day <= 2160; day ++){
 
             displayPrices(day);
-            /*
+
 
             String choice = buyOrSell();
             if(choice.equals("skip")) continue;
-            String stock = chooseStock();
-
-             */
+            if(choice.equals("exit")) break;
+            int numShares = numShares(chooseStock());
+            tradeStatus("successful");
+            System.out.println("Loop complete" );
         }
-
-
-
+        scanner.close();
     }
 
     public static void explainApp() {
@@ -49,6 +52,19 @@ public class Main {
         System.out.print(Color.BLUE + "\n - TFSA: ");
         System.out.println(Color.YELLOW + "Every trade (buy/sell) made from a TFSA is charged a 1% fee.\n");
         System.out.println(Color.BLUE + " - Neither account has a limit on the amount of trades that can be made." + Color.RESET);
+    }
+
+    public static void initializeStocks(){
+        Stock FB = new Stock(Stock.StockName.FB);
+        Stock AAPL = new Stock(Stock.StockName.AAPL);
+        Stock GOOG = new Stock(Stock.StockName.GOOG);
+        Stock TSLA = new Stock(Stock.StockName.TSLA);
+        stocks = new ArrayList<>();
+        stocks.add(FB);
+        stocks.add(AAPL);
+        stocks.add(GOOG);
+        stocks.add(TSLA);
+
     }
 
     public static void initializeAccount(String type){
@@ -82,7 +98,7 @@ public class Main {
     public static String buyOrSell() {
         System.out.print("\n\n  Would you like to 'buy' or 'sell' or 'skip': ");
         String choice = scanner.nextLine();
-        while (!choice.equals("buy") && !choice.equals("sell") && !choice.equals("skip")) {
+        while (!choice.equals("buy") && !choice.equals("sell") && !choice.equals("skip") && !choice.equals("exit")) {
             System.out.print("  Would you like to 'buy' or 'sell' or 'skip': ");
             choice = scanner.nextLine();
         }
@@ -112,17 +128,20 @@ public class Main {
         return shares;
     }
 
-    ///* TODO
+
     public static void displayPrices(int day) {
         System.out.println("\n\n\t  DAY " + day + " PRICES\n");
 
-        System.out.println("  " + Color.BLUE + Stock.AAPL + "\t\t" + Color.GREEN + getPrice(Stock.AAPL, day));
-        System.out.println("  " + Color.BLUE + Stock.FB + "\t\t" + Color.GREEN + getPrice(Stock.FB, day));
-        System.out.println("  " + Color.BLUE + Stock.GOOG + "\t\t" + Color.GREEN + getPrice(Stock.GOOG, day));
-        System.out.println("  " + Color.BLUE + Stock.TSLA + "\t\t" + Color.GREEN + getPrice(Stock.TSLA, day) + Color.RESET);
+        for (Stock s:stocks ) {
+            String price = getPrice(s, day);
+            System.out.println("  " + Color.BLUE + s.getName() + "\t\t" + Color.GREEN + price);
+            if(price != null){
+                s.setPrice(Double.parseDouble(price));
+            }
 
+        }
     }
-   // */
+
     public static void tradeStatus(String result) {
         System.out.println("\n  The trade was " + (result.equals("successful") ? Color.GREEN : Color.RED) + result + Color.RESET + ". Here is your portfolio:");
         System.out.println(account);
@@ -130,10 +149,8 @@ public class Main {
         scanner.nextLine();
     }
 
-
-   // /* TODO
     public static String getPrice(Stock stock, int day) {
-        Path p = getPath(stock.toString());
+        Path p = getPath(stock.getName().toString());
 
         try{
             String[] result = Files.lines(p)
@@ -149,7 +166,6 @@ public class Main {
         }
         return null;
     }
- //*/
 
     public static Path getPath(String stock) {
         String filename = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\StockSimulation\\Data\\" + stock + ".csv";
