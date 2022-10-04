@@ -1,5 +1,6 @@
 package StockSimulation.Model.Account;
 
+import StockSimulation.Model.ITrade;
 import StockSimulation.Model.Stock;
 import StockSimulation.Model.Trade;
 import StockSimulation.utils.Color;
@@ -9,21 +10,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public abstract class Account {
+public abstract class Account implements ITrade {
 
     private Map<Stock.StockName, Integer> portfolio;
-
     private double funds;
 
     public Account(double amount) {
         this.portfolio = new HashMap<>();
-        this.funds = amount;
+        this.funds = round(amount);
     }
 
     public Account(Account source) {
 
-        this.portfolio = new HashMap<Stock.StockName, Integer>(Map.copyOf(source.portfolio));
+        this.portfolio = new HashMap<>(Map.copyOf(source.portfolio));
         this.funds = source.funds;
+    }
+
+    @Override
+    public boolean ExecuteTrade(Trade trade) {
+
+        if (trade.getType().equals(Trade.Type.MARKET_SELL)){
+            return sellShares(trade.getStock(), trade.getNumberOfShares());
+
+        }else{
+            return buyShares(trade.getStock(), trade.getNumberOfShares());
+        }
+
     }
 
     public void addStock(Stock stock, int numberOfShares){
@@ -31,19 +43,14 @@ public abstract class Account {
         this.portfolio.put(stock.getName(), numberOfShares);
     }
 
-    public boolean transaction(Stock stock, Trade.Type type){
-       //TODO: sell, purchase
-        if (type.equals(Trade.Type.MARKET_SELL)){
-            return true;
-        }
-        return false;
-    }
 
     public boolean sellShares(Stock stock,int numberOfShares){
-        int availableShares = portfolio.get(stock.getName());
 
-        if(numberOfShares > availableShares || numberOfShares < 0){
-            throw new IllegalArgumentException("Error: Number of shares");
+        int availableShares = getInventory(stock);
+
+        if(availableShares < numberOfShares){
+            return false;
+            //throw new IllegalArgumentException("Error: number of shares in Account.sellShares()");
         }
 
         portfolio.put(stock.getName(), availableShares-numberOfShares);
@@ -52,6 +59,21 @@ public abstract class Account {
 
         return true;
 
+    }
+    public int getInventory(Stock stock){
+        return this.portfolio.get(stock.getName());
+    }
+
+    public boolean buyShares(Stock stock, int numberOfShares){
+        double price = round(numberOfShares * stock.getPrice());
+
+        if(price < funds){
+            portfolio.put(stock.getName(), portfolio.get(stock.getName()) + numberOfShares);
+            funds -= price;
+            return true;
+        }
+
+        return false;
 
     }
 

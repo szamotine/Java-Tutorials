@@ -4,6 +4,7 @@ import StockSimulation.Model.Account.Account;
 import StockSimulation.Model.Account.Personal;
 import StockSimulation.Model.Account.TFSA;
 import StockSimulation.Model.Stock;
+import StockSimulation.Model.Trade;
 import StockSimulation.utils.Color;
 
 import java.nio.file.Files;
@@ -31,11 +32,14 @@ public class Main {
             displayPrices(day);
 
 
-            String choice = buyOrSell();
-            if(choice.equals("skip")) continue;
-            if(choice.equals("exit")) break;
-            int numShares = numShares(chooseStock());
-            tradeStatus("successful");
+            String buyOrSell = buyOrSell();
+            if(buyOrSell.equals("skip")) continue;
+            if(buyOrSell.equals("exit")) break;
+            String stock = chooseStock();
+            Stock chosenStock = findStock(stock);
+            int numShares = numShares(stock);
+            Trade trade = new Trade(chosenStock,buyOrSell, numShares);
+            tradeStatus(account.ExecuteTrade(trade));
             System.out.println("Loop complete" );
         }
         scanner.close();
@@ -121,6 +125,12 @@ public class Main {
         return stock;
     }
 
+    public static Stock findStock(String stock){
+
+        return stocks.stream().filter(s->s.getName().equals(Stock.StockName.valueOf(stock)))
+                .findFirst().orElse(null);
+    }
+
     public static int numShares(String choice) {
         System.out.print("  Enter the number of shares you'd like to " + choice + ": ");
         int shares = scanner.nextInt();
@@ -133,7 +143,6 @@ public class Main {
         }
         return shares;
     }
-
 
     public static void displayPrices(int day) {
         System.out.println("\n\n\t  DAY " + day + " PRICES\n");
@@ -148,8 +157,10 @@ public class Main {
         }
     }
 
-    public static void tradeStatus(String result) {
-        System.out.println("\n  The trade was " + (result.equals("successful") ? Color.GREEN : Color.RED) + result + Color.RESET + ". Here is your portfolio:");
+    public static void tradeStatus(boolean result) {
+        String r = result ? "successful" : "unsuccessful";
+
+        System.out.println("\n  The trade was " + (result ? Color.GREEN : Color.RED) + r + Color.RESET + ". Here is your portfolio:");
         System.out.println(account);
         System.out.print("\n  Press anything to continue");
         scanner.nextLine();
