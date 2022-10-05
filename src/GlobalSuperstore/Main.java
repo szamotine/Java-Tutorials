@@ -1,23 +1,24 @@
 package GlobalSuperstore;
 
-import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
 
-    static final String SALES = "data/sales.csv"; //Use backslash Windows users
+    static final String SALES = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\GlobalSuperStore\\Data\\sales.csv"; //Use backslash Windows users
 
     public static void main(String[] args) {
 
         try {
-            Path path = Paths.get(Thread.currentThread().getContextClassLoader().getResource(SALES).toURI());
+
+            Path path = Paths.get(SALES);
             //calculate average sales of "Furniture" here
             //calculate average sales of "Technology" here
             //calculate average sales of "Office Supplies" here
             //calculate total average of sales here
 
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -37,6 +38,23 @@ public class Main {
      *   6. Returns the average as double.
      *
      */
+    public static double average(Path path, String category){
+
+        try{
+            Files.lines(path)
+                    .skip(1)
+                    .map(line -> line.split(","))
+                    .filter(values -> values[0].equals(category))
+                    .mapToDouble(values -> Double.valueOf(values[1]) * Double.valueOf(values[2]))
+                    .average().getAsDouble();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return 0.0;
+        }
+
+        return 0;
+    }
 
 
 
@@ -52,6 +70,10 @@ public class Main {
      *   4. Applies the terminal operation average.
      *   5. Returns the average as double.
      */
+    public static double totalAverage(Path path){
+        //TODO: https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/cd9e6988-e1e6-4d38-974f-3b9fa94b8858
+        return 0.0;
+    }
 
 
 }
