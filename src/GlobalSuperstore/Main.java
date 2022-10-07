@@ -17,7 +17,12 @@ public class Main {
 
 
     public static void main(String[] args) {
+        //TODO: https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/a9fd2ac8-8258-4449-b95b-ff5f44192d85
+        //Locks
 
+
+        //TODO: https://www.learnthepart.com/course/2dfda34d-6bbc-4bd5-8f45-d5999de2f514/1fa5a69c-3872-41e0-8ce5-022099d7c479
+        //Atomic
 
         try {
             time = System.nanoTime();
