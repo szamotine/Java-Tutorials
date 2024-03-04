@@ -23,7 +23,7 @@ public class Chequing extends Account implements Taxable {
 
     @Override
     public void deposit(double amount) {
-       // amount = calculateIncomeAfterTax(amount);
+        amount = calculateIncomeAfterTax(amount);
         super.deposit(amount);
     }
 
