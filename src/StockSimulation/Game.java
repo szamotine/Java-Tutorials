@@ -229,7 +229,7 @@ public class Game {
     }
 
     public static Path getPath(String stock) {
-        String filename = "C:\\Users\\s_zam\\Desktop\\Programming\\Bootcamp\\src\\StockSimulation\\Data\\" + stock + ".csv";
+        String filename = "C:\\Projects\\Java\\Java-Tutorials\\src\\StockSimulation\\Data\\" + stock + ".csv";
         try{
             return Paths.get(filename);
             //return Paths.get(Thread.currentThread().getContextClassLoader().getResource("src/StockSimulation/data/"+stock+".csv").toURI());
